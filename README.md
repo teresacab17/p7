@@ -3,13 +3,12 @@
 
 <br/><br/><br/>
 
-# Práctica 5: Blog
+# Práctica 6: Blog
 
 Versión: 19 de Enero de 2022
 
 ## Objetivos
 * Afianzar los conocimientos obtenidos sobre el uso de Express para desarrollar servidores web.
-* Entender el uso de express-generator, así como del esqueleto y de la estructura de directorios generada para albergar una aplicación basada en node y express.
 * Aprender a completar en el esqueleto una aplicación de servidor basada en MVC (Modelo-Vista-Controlador) con vistas parciales EJS.
 
 ## Descripción de la práctica
@@ -341,19 +340,57 @@ Si pasa todos los tests se dará la máxima puntuación.
 
 # TODO
 
-* Actualizar el enunciado. He cambiado las referencias de quiz a post, y he actualizado algunos campos, pero habría que darle una vuelta.
+* Actualizar el enunciado. He cambiado las referencias de quiz a post, y he actualizado algunos campos, pero habría que darle una vuelta. Hay que darles las migraciones, seeders, etc. en el enunciado.
 
-Estas son las instrucciones originales del enunciado:
+Esta es la salida del autocorrector **en este momento**:
 
 ```
-Enunciado Practica 5
+Test: 6: Comprobar que las plantillas express-partials tienen los componentes adecuados
+        Puntuación: 1/1
+
+Tests funcionales
+
+Test: 7: Comprobar que se resuelve una petición a / con código 200
+        Puntuación: 0.25/0.25
+        Observaciones: Respuesta correcta
+
+Test: 8: Comprobar que se resuelve una petición a /posts con código 200
+        Puntuación: 0.25/0.25
+        Observaciones: Respuesta correcta
+
+Test: 9: Comprobar que se resuelve una petición a /author con código 200
+        Puntuación: 0.25/0.25
+        Observaciones: Respuesta correcta
+
+Test: 10: Comprobar que se resuelve una petición a /users con código 404
+        Puntuación: 0.25/0.25
+        Observaciones: Respuesta correcta
+
+Test: 11: Comprobar que se muestran los posts
+        Puntuación: 2/2
+        Observaciones: ¡Enhorabuena!
+
+Test: 12: Comprobar que se pueden editar los posts
+        Puntuación: 3/3
+        Observaciones: ¡Enhorabuena!
+
+Test: 13: Comprobar que se pueden borrar los posts
+        Puntuación: 3/3
+        Observaciones: ¡Enhorabuena!
+
+Resultado Final: 10/10
+```
+
+
+Estas son las instrucciones ~originales~ del enunciado:
+
+```
+Enunciado Practica 6
 
 Tareas:
-  1 - Crear un proyecto con Express-generator.
+  1 - Partir de la P5
       Y aplicar los cambios realizados en el miniproyecto del esqueleto.
-  2 - Integrar el CV de la practica 2 como una vista EJS
-      URL = /author
-  3 - Crear el recurso Posts con adjuntos.
+  2 - Crear el recurso Posts con adjuntos.
       Modelos: Post(title, body, ...) y Attachment (mime, imagen, ...).
       Usar migraciones.
       API REST tipico: /posts/.....
