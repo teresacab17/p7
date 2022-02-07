@@ -120,6 +120,12 @@ describe("Tests Práctica 2", function() {
 
         before(async function() {
             // Crear base de datos nueva y poblarla antes de los tests funcionales. por defecto, el servidor coge post.sqlite del CWD
+            try {
+                fs.unlinkSync(db_file);
+                console.log('Previous test db removed. It is going to be created a new one ')
+            } catch {
+                console.log('Previous test db does not exist. It is going to be created a new one.')
+            }
             fs.closeSync(fs.openSync(db_file, 'w'));
 
             let sequelize_cmd = path.join(PATH_ASSIGNMENT, "node_modules", ".bin", "sequelize")
@@ -132,7 +138,7 @@ describe("Tests Práctica 2", function() {
 
 
             let bin_path = path.join(PATH_ASSIGNMENT, "bin", "www");
-            server = spawn('node', [bin_path], {env: {PORT: TEST_PORT, DATABASE_URL: db_url}});
+            server = spawn('node', [bin_path], {env: {PORT: TEST_PORT, DATABASE_URL: db_file}});
             server.stdout.setEncoding('utf-8');
             server.stdout.on('data', function(data) {
                 log('Salida del servidor: ', data);
@@ -152,7 +158,11 @@ describe("Tests Práctica 2", function() {
         after(async function() {
             // Borrar base de datos
             await server.kill();
-            fs.unlinkSync(db_file);
+            try {
+                fs.unlinkSync(db_file);
+            } catch {
+                console.log('Test db not removed')
+            }
         })
 
         var endpoints = [
