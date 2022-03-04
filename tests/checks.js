@@ -116,7 +116,8 @@ describe("Tests Práctica 2", function() {
 
     describe("Tests funcionales", function () {
         var server;
-        const db_file = path.resolve(path.join(ROOT, 'post.sqlite'));
+        const db_filename = 'post.sqlite';
+        const db_file = path.resolve(path.join(ROOT, db_filename));
 
         before(async function() {
             // Crear base de datos nueva y poblarla antes de los tests funcionales. por defecto, el servidor coge post.sqlite del CWD
@@ -130,7 +131,7 @@ describe("Tests Práctica 2", function() {
 
             let sequelize_cmd = path.join(PATH_ASSIGNMENT, "node_modules", ".bin", "sequelize")
             let db_url = `sqlite://${db_file}`;
-
+            let db_relative_url = `sqlite://${db_filename}`;
             await exec(`${sequelize_cmd} db:migrate --url "${db_url}" --migrations-path ${path.join(PATH_ASSIGNMENT, "migrations")}`)
             log('Lanzada la migración');
             await exec(`${sequelize_cmd} db:seed:all --url "${db_url}" --seeders-path ${path.join(PATH_ASSIGNMENT, "seeders")}`)
@@ -138,13 +139,16 @@ describe("Tests Práctica 2", function() {
 
 
             let bin_path = path.join(PATH_ASSIGNMENT, "bin", "www");
-            server = spawn('node', [bin_path], {env: {PORT: TEST_PORT, DATABASE_URL: db_file}});
+            server = spawn('node', [bin_path], {env: {PORT: TEST_PORT, DATABASE_URL: db_relative_url}});
             server.stdout.setEncoding('utf-8');
             server.stdout.on('data', function(data) {
                 log('Salida del servidor: ', data);
             })
+            server.stderr.on('data', function (data) {
+                log('stderr: ' + data);
+            });
             log(`Lanzado el servidor en el puerto ${TEST_PORT}`);
-            await new Promise(resolve => setTimeout(resolve, TIMEOUT));
+            await new Promise(resolve => setTimeout(resolve, 20000));
             browser.site = `http://localhost:${TEST_PORT}/`;
             try{
                 await browser.visit("/");
@@ -206,7 +210,7 @@ describe("Tests Práctica 2", function() {
 
             for (idx in posts) {
                 let post = posts[idx];
-                this.msg_err = `No se encuentra el post "${posts.title}" en los posts`;
+                this.msg_err = `No se encuentra el post "${post.title}" en los posts`;
                 res.includes(post.title).should.be.equal(true);
                 await browser.visit("/posts/" + post.id);
                 this.msg_err = `La página del post "${post.title}" (/posts/${post.id}) no incluye el cuerpo correctamente`;
@@ -228,7 +232,7 @@ describe("Tests Práctica 2", function() {
 
                    for (idx in posts) {
                        let post = posts[idx];
-                       this.msg_err = `No se encuentra el post "${posts.title}" en los posts`;
+                       this.msg_err = `No se encuentra el post "${post.title}" en los posts`;
                        res.includes(post.title).should.be.equal(true);
                        await browser.visit(`/posts/${post.id}/edit`);
                        this.msg_err = `La página del post "${post.title}" (/posts/${post.id}) no parece permitir editar correctamente`;
@@ -253,7 +257,7 @@ describe("Tests Práctica 2", function() {
                    for (idx in posts) {
 
                        let post = posts[idx];
-                       this.msg_err = `No se encuentra el post "${posts.title}" en los posts`;
+                       this.msg_err = `No se encuentra el post "${post.title}" en los posts`;
 
                        res.includes(post.title).should.be.equal(true);
 
