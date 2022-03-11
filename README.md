@@ -1,309 +1,380 @@
 <img  align="left" width="150" style="float: left;" src="https://www.upm.es/sfs/Rectorado/Gabinete%20del%20Rector/Logos/UPM/CEI/LOGOTIPO%20leyenda%20color%20JPG%20p.png">
-<img  align="right" width="60" style="float: right;" src="http://www.dit.upm.es/figures/logos/ditupm-big.gif">
+<img  align="right" width="60" style="float: right;" src="https://www.dit.upm.es/images/dit08.gif">
 
 <br/><br/><br/>
 
-# Práctica 6: Blog
 
-Versión: 19 de Enero de 2022
+# Práctica 6: Posts
+
+Versión: 7 de Febrero de 2022
 
 ## Objetivos
 * Afianzar los conocimientos obtenidos sobre el uso de Express para desarrollar servidores web.
-* Aprender a completar en el esqueleto una aplicación de servidor basada en MVC (Modelo-Vista-Controlador) con vistas parciales EJS.
+* Aprender a desarrollar APIs REST para gestionar recursos web.
 
 ## Descripción de la práctica
 
-En esta práctica se desarrollará un servidor web con el siguiente interfaz REST: 
+Desarrollar un servidor web que implemente un **Blog** usando node y express. 
+Este blog debe mostrar las publicaciones que se hayan realizado, debe permitir crear nuevas publicaciones, y 
+editar o borrar las ya existentes.En este enunciado usaremos el término **post** para referirnos a una publicación.
 
-```
-GET /         // muestra la página home de bienvenida.
-GET /credits  // muestra la página de créditos con el nombre, la foto y cv del autor.
-GET /posts  // muestra un listado con todos los posts almacenados en la BBDD. 
-```
+Esta práctica se desarrollará como continuación de la **Práctica 5 Express CV**, añadiendo todos los elementos 
+necesarios para convertirla en un blog.
 
-El esqueleto inicial del servidor web se generará con el paquete **express-generator**. Este esqueleto se adaptará para atender las primitivas anteriores. Se seguirá el patrón MVC, creando los modelos, controladores, rutas y vistas necesarios.
+El desarrollo a realizar en esta práctica es muy parecido al realizado en el mini proyecto **Quiz** visto en las clases
+teóricas de la asignatura. Deben realizarse tareas muy similares. En el mini proyecto **Quiz** se desarrollaron quizzes
+que contenían una pregunta y una respuesta, y aquí se van a desarrollar posts que contienen un título y un cuerpo. En
+ambos casos, quizzes y posts pueden tener una imagen adjunta. Los modelos a desarrollar, las primitivas, los 
+controladores, las vistas, etc. serán muy parecidos a los del mini proyecto **Quiz**. La principal diferencia radica 
+en que en el mini proyecto **Quiz** se puede jugar a adivinar los quizzes, y esa funcionalidad no existe en el blog.
 
-Para el modelo se creará una base de datos **SQLite** a la que se accederá usando el ORM **Sequelize**. La base de datos tendrá una tabla llamada **Posts** que se inicializará con los siguientes posts: 
+En la práctica 6 deben añadirse las siguiente primitivas al interfaz REST:
 
-```
-[ { title: "Capital de Italia",   body: "Roma" },  
-  { title: "Capital de Francia",  body: "París"},
-  { title: "Capital de España",   body: "Madrid"},
-  { title: "Capital de Portugal", body: "Lisboa"}
-] 
-```
+* `GET /posts`
+    * Muestra un listado con todos los posts existentes en la BBDD.
+* `GET /posts/:postId(\\d+)`
+    * Muestra el post de la BBDD cuyo **id** es igual al valor pasado en el parámetro de ruta **:postId**.
+* `GET /posts/new`
+    * Muestra una página con un formulario para crear un nuevo post.
+* `POST /posts`
+    * Invocado por el formulario anterior para crear el post con los datos introducidos.
+* `GET /posts/:postId(\\d+)/edit`
+    * Muestra una página con un formulario para editar el post cuyo **id** es igual al valor pasado en el parámetro de ruta **:postId**.
+* `PUT /posts/:postId(\\d+)`
+    * Invocado por el formulario anterior para actualizar el post con **id** igual a **:postId**.
+* `DELETE /posts/:postId(\\d+)`
+    * Borrar de la BBDD el post cuyo **id** es igual a **postId**.
+  
+Se seguirá el patrón MVC, creando los modelos, controladores, rutas y vistas que se necesiten para gestionar los posts.
 
-Para las vistas se usarán plantillas **EJS**. Se usará el paquete **express-partials** para añadir soporte de vistas parciales y poder definir un marco común de aplicación (**layout.ejs**) para todas las vistas. El acceso a cada una de las vistas se hará usando una barra de navegación en el marco de la aplicación.
+Para el modelo se creará una base de datos **SQLite** a la que se accederá usando el ORM **Sequelize**. 
+La base de datos tendrá dos tablas: la tabla **Posts** para almacenar los posts, y la tabla **Attachments** para
+guardar la imagen adjunta de cada post.
+
+Los ficheros con las definiciones de los modelos, las migraciones, los seeders, las rutas, los controladores 
+y vistas se crearán siguiendo la misma filosofía que en el mini proyecto **Quiz**. 
+Los modelos se definirán en los ficheros **models/index.js**, **models/post.js** y **models/attachment.js**.
+Las migraciones y seeders se crearán en los directorios **migrations** y **seeders**.
+Las rutas se definirán en el fichero **routes/index.js**.
+Los middlewares de los posts se crearán en el fichero controlador **controllers/post.js**.
+Las vistas de los posts se crearán en el directorio **views/posts**, y se llamarán 
+**_form.ejs**, **edit.ejs**, **index.ejs**, **new.ejs** y **show.ejs**.
+La vista que pinta los adjuntos se creará en **views/attachments/attachment.ejs**.
+
 
 ## Descargar el código del proyecto
 
-Es necesario utilizar la **versión 12 de Node.js** para el desarrollo de esta práctica. El proyecto debe clonarse en el ordenador en el que se está trabajando:
+Es necesario utilizar la **versión 16 de Node.js** para el desarrollo de esta práctica.
+El proyecto debe clonarse en el ordenador en el que se está trabajando:
 
-```
-$ git clone https://github.com/CORE-2020/Entrega7_postexpress
-```
+    $ git clone https://github.com/CORE-UPM/P6_Blog
 
-A continuación se debe acceder al directorio de trabajo, e instalar todas las dependencias.
+A continuación se debe acceder al directorio de trabajo, e instalar todas las dependencias propias de esta práctica.
 
-```
-$ cd Entrega7_postexpress
-$ npm install
-```
+    $ cd P6_Blog
+    $ npm install
 
 ## Tareas
 
-### Tarea 1 - Crear el esqueleto de la aplicación
+### Tarea 1 - Copiar el trabajo ya realizado en la Entrega 5 ExpressCV
 
-El proyecto clonado solo contiene los ficheros necesarios para ejecutar el autocorrector. El alumno debe crear un subdirectorio nuevo en el que desarrollará la practica. Debe usar el paquete **express-generator** para crear ese subdirectorio de trabajo con el esqueleto inicial de la práctica.
+En esta práctica hay que continuar y ampliar el desarrollo realizado en la práctica 5.
 
-Primero hay que instalar el paquete **express-generator**. Para ello, el alumno debe ejecutar:
+El alumno debe copiar el directorio **blog** de la **P5_ExpressCV** en el directorio **P6_Blog/blog** de 
+esta práctica 6. Las tareas a realizar en esta práctica 6 de desarrollarán dentro del directorio **P6_Blog/blog**.
 
-```
-$ npm install express-generator
-```
+Para copiar/duplicar el directorio **P5_ExpressCV/blog** en el directorio **P6_Blog/blog**, puede usar un
+explorador de archivos. Asegúrese de copiar el directorio y no de moverlo de sitio, para no perder el trabajo original.
+También puede ejecutar el siguiente comando en un terminal para copiar el directorio y todo su contenido:
 
-Este paquete proporciona un programa llamado **express** que sirve para crear el esqueleto inicial de una aplicación web, es decir, los ficheros que implementan una version inicial del servidor.
+    $ cp -r PATH_DE_PRACTICA_5/P5_ExpressCV/blog PATH_DE_PRACTICA_6/P6_Blog/.
 
-Para crear estel esqueleto inicial, el alumno debe ejecutar el comando:
+### Tarea 2 - Desarrollar el modelo
 
-```
-$ npx express --view=ejs post_express
-```
+La práctica usa una base de datos **SQLite** a la que se accede usando **Sequelize**, y que se crea y rellena usando 
+migraciones y seeders. Por tanto, el alumno debe instalar los paquetes **sqlite3**, **sequelize** y **sequelize-cli**:
 
-Este comando crea el subdirectorio **post_express** con los ficheros del esqueleto inicial de la práctica. 
+    $ npm install sqlite3 sequelize sequelize-cli
 
-Para arrancar y probar el servidor, primero hay que cambiarse al directorio **post_express** e instalar los paquetes de los que depende.
+El alumno debe crear el fichero **models/index.js**.
+El contenido del fichero **models/index.js** es muy parecido al realizado en el mini proyecto **Quiz**. 
+Se requerirá el paquete **sequelize**, se creará una instancia de **Sequelize** que maneje la base de datos **SQLite** 
+alojada en el fichero **blog.sqlite**, se definirá el modelo **Post** con los campos **title** y **body**, se definirá 
+el modelo **Attachment** con los campos **mime** e **image**, se definira la relación 1-a-1 entre **Post** y **Attachment**
+y se exportará la instancia **sequelize** creada.
 
-```
-$ cd post_express
-$ npm install
-```
+El tipo del campo **image** del modelo **Attachment** debe ser **BLOB('long')**, y su contenido serán los bytes de la
+imagen adjunta codificados en base64.
 
-Ahora el servidor puede lanzarse ejecutando el comando:
+La relación 1-a-1 entre **Post** y **Attachment** debe definirse de forma que la clave externa **attachmentId** se 
+cree en la tabla **Posts**. 
 
-```
-$ npm start
-```
+El alumno también debe crear dos migraciones para crear las tablas **Posts**y **Attachments** en la base de datos. 
 
-**start** es un script definido en **package.json** para que ejecute **"node bin/www"** (nota: El servidor también podría lanzarse ejecutando directamente este comando).
+Los ficheros de migración deben llamarse **migrations/YYYYMMDDhhmmss-CreateAttachmentsTable.js** y
+**migrations/YYYYMMDDhhmmss-CreatePostsTable.js**, donde YYYYMMDDhhmmss es la fecha en la que se creó cada fichero. 
+Para crear estos ficheros puede usar los comandos:
 
-El servidor lanzado atiende las peticiones en el puerto **3000**. Hay que ejecutar un navegador (Chrome, Firefox, Safari, ...) y conectarse a la URL **http://localhost:3000**. El navegador mostrará la página principal que ofrece el servidor que hemos creado.
+    npx sequelize migration:create --name  CreateAttachmentsTable
+    npx sequelize migration:create --name  CreatePostsTable
 
-### Tarea 2 - Limpiar el esqueleto
+Nota: en el mini proyecto **Quiz** se usaba una migración separada para añadir el campo **attachmentId** a la tabla
+**Quizzes**.
+En esta práctica se propone crear ese campo directamente en la migración CreatePostsTable, es decir, que esa migración 
+cree todos los campos de la tabla **Posts**: **id**, **title**, **body**, **attachmentId**, **createdAt** y **updatedAt**.
 
-El esqueleto generado por **express** tiene algunos elementos que no queremos usar, por lo que vamos a hacer limpieza. Concretamente vamos a eliminar el recurso **user** creado por el esqueleto. Este recurso podría ser el paso inicial para completar un servicio de gestión de usuarios.
+El alumno también debe crear un fichero seeder que añada a la tabla **Posts** tres posts sin imagen adjunta y con el siguiente contenido:
 
-* Eliminar las rutas de user: El esqueleto creó el fichero **routes/users.js** con las definiciones de las rutas de usuarios. El alumno de borrar este fichero.
-* El fichero **routes/users.js** se carga y usa en **app.js**. El alumno debe buscar y eliminar las referencias a **routes/users.js**. Son las siguientes sentencias de app.js:
+    title: 'Primer Post' + body: 'Esta práctica implementa un Blog.'
+    title: 'Segundo Post' + body: 'Todo el mundo puede crear posts.'
+    title: 'Tercer Post' + body: 'Cada post puede tener una imagen adjunta.'
 
-```
-var usersRouter = require('./routes/users');
-app.use('/users', usersRouter);
-```
 
-### Tarea 3 - Instalar supervisor
+Este fichero seeder es muy parecido al desarrollado en el mini proyecto **Quiz**.
 
-Cada vez que se modifica algún fichero (javascript) de nuestro proyecto, hay que detener el servidor y relanzarlo para los nuevos cambios se apliquen. Para no tener que hacer este proceso manualmente, pueden instalarse programas que lo hacen automáticamente por nosotros (**forever**, **supervisor**, ...). Estos programa vigilan los ficheros de nuestra aplicación, y si detectan que hay cambios, detienen la aplicación y la relanzan de nuevo.
+El fichero seeder debe llamarse **seeders/YYYYMMDDhhmmss-FillPostsTable.js**, 
+donde YYYYMMDDhhmmss es la fecha en la que se creo el fichero. 
+Para crear este fichero puede usar el comando:
 
-El alumno debe usar **supervisor**. Para instalarlo debe ejecutar el siguiente comando en el terminal estando en el directorio `post_express`
+    npx sequelize seed:generate --name FillPostsTable
 
-```
-$ npm install supervisor
-```
+El alumno debe crear en **package.json** (dentro del directorio `blog`) los siguientes 
+scripts para aplicar la migración y el seeder (hay versiones para unix y para windows):
 
-(Nota: También se puede instalar de forma global usando **sudo** y **-g**.)
+    "migrate": "sequelize db:migrate --url sqlite://$(pwd)/blog.sqlite",  
+    "seed": "sequelize db:seed:all --url sqlite://$(pwd)/blog.sqlite",  
+    "migrate_win": "sequelize db:migrate --url sqlite://%cd%/blog.sqlite",  
+    "seed_win": "sequelize db:seed:all --url sqlite://%cd%/blog.sqlite"  
 
-Para usar **supervisor**, el servidor se debe lanzar ejecutando el comando "**npx supervisor bin/www**". Por razones de comodidad, se puede añadir un script en **package.json**. 
+Así, para ejecutar las migraciones y el seeder puede invocar los comandos:
 
-El alumno debe modificar la sección **scripts** de **package.json** (del directorio `post_express`) para que quede así:
+    $ npm run migrate  
+    $ npm run seed
 
-```
-  "scripts": {
-    "start": "node ./bin/www",
-    "super": "supervisor ./bin/www"
-  }
-```
+o su versión con **_win** para máquinas Windows.
 
-Se ha añadido el script **super** para lanzar el servidor usando **supervisor**. El comando para ejecutar el script que lanza el servidor usando **supervisor** es:
+Nota: El comando sequelize tiene un fallo y no permite que existan espacios en blanco en la URL que apunta al fichero
+**blog.sqlite**. Desarrolle esta práctica en un directorio cuya ruta absoluta no contenga espacios en blanco.
 
-```
-$ npm run super
-```
+### Tarea 3 - Actualizar el marco de aplicación
+Modifique el menú de navegación de **views/layout.ejs**.
+El layout debe contener al menos una etiqueta html "header" de clase "main" e id "mainHeader".
+Además debe añadir un nuevo botón con el texto **Posts**. 
+Al pulsar este botón, se enviara la primitiva **GET /posts** para navegar a la página que muestra un listado con 
+los posts existentes.
 
-### Tarea 4 - Crear el marco de aplicación
+### Tarea 4 - Desarrollar la primitiva GET /posts
 
-El paquete **express-partials** se usa en aplicaciones **Express** para soportar vistas parciales y añadir un marco de aplicación común. En esta práctica solo usaremos el marco de aplicación común. El marco de aplicación proporciona la página HTML que se usará para mostrar cualquiera de las vistas del servidor.
+El servidor debe devolver una página mostrando todos los posts almacenados en la BBDD cuando reciba la 
+petición HTTP **GET /posts**.
 
-El paquete **express-partials** proporciona un middleware que modifica el método **res.render** proporcionado por **Express**. Por defecto, la nueva versión de **res.render** inyecta las vistas EJS a mostrar dentro del fichero **views/layout.ejs**, que es el fichero que implementa el marco de aplicación. El marco tiene una sentencia **\<%- body %\>** que es donde se inserta la vista a mostrar.
+Esta ruta debe definirse en el fichero **routes/index.js**.
 
-El alumno debe instalar este paquete ejecutando:
+El método middleware que atiende esta peticiónes deben desarrollarse en el fichero controlador **controllers/post.js**,
+y debe llamarse **index**.
 
-```
-$ npm install express-partials
-```
+El fichero **routes/index.js** debe requerir/importar el fichero **controllers/post.js**
+para poder acceder al método **index** exportado.
 
-En la documentación del paquete se detalla cómo debe instalarse. En **app.js** hay que requerir el paquete y usar **app.use** para instalar el middleware que proporciona.
+El middleware **index** debe recuperar de la base de datos todos los posts existentes usando el método **findAll** del 
+modelo **Post**. A continuación debe enviar una respuesta HTTP renderizando 
+la vista **views/posts/index.ejs**, a la que pasará como argumento el array con los posts sacados de la base de datos.
 
-```
-...
-var logger = require('morgan');
-var partials = require('express-partials');    \<--- Añadir
+La llamada a **findAll** debe cargar también la imagen adjunta de cada post usando la opción **include**.
 
-var indexRouter = require('./routes/index');
+La vista **views/posts/index.ejs** toma como parámetro el array de posts que debe mostrar. 
 
-var app = express();
+La vista pintará la lista de posts dentro de un elemento HTML de tipo **\<section\>**. Cada post debe ser un **\<article\>** con clase "postShow".
+Para cada post debe pintar el título del post, su imagen adjunta, y tres botones que permitan mostrar, editar o borrar el post.
+No pinte el cuerpo del post.
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(partials());           \<--- Añadir
+Para pintar la imagen adjunta se usará la vista **views/attachments/attachment.ejs**, que es igual a la desarrollada en
+el mini proyecto **Quiz**.
 
-app.use('/', indexRouter);
-...
-```
-
-El alumno debe crear el fichero **views/layout.ejs** conteniendo el marco de aplicación. Es la página HTML5 que se enviará al cliente (el navegador) para todas las peticiones que realice. Esta página debe utilizar las marcas de HTML5 habituales: 
-
-- **\<header\>**: cabecera donde se suele incluir el nombre del portal.
-- **\<nav\>**: barra de navegación con los botones para solicitar las vista que se desea ver.
-- **\<footer\>**: pié de página.
-
-El fichero **views/layout.ejs** debe incluir la sentencia **\<%- body %\>** en el punto donde se va a insertar la vista a mostrar (el método **res.render** asigna el código HTML de la vista a la variable **body**).
-
-Finalmente, el alumno debe retocar la vista **views/index.ejs** que implementa la vista home para que se integre correctamente con el marco **views/layout.ejs**, usando un elemento HTML de tipo **\<section\>**. Elimine de **views/index.ejs** todos los elementos HTML que ya proporciona **views/layout.ejs**, y cree una sección **\<section\>** que contenga solo el contenido específico de esta vista (el encabezado y el párrafo de bienvenida).
-
-### Tarea 5 - Crear los elementos MVC de la primitiva GET /credits. 
-
-El alumno debe modificar el fichero **routes/index.js** para añadir la nueva ruta para **GET /credits**.
-
-La definición de esta ruta es muy parecida a la definición de **GET /**.
-Use **router** con su método **get**. El primer parámetro es el path de la ruta, es decir, **"/credits"**. El segundo parámetro es una función middleware que debe renderizar la vista con los créditos.
-
-La vista con los créditos se debe implementar en el fichero **views/credits.ejs**. Es un fichero **EJS**. Debe contener un elemento HTML de tipo **\<section\>**. Esta vista debe mostrar el título de la página, el nombre del autor de la práctica, su foto y un breve texto sobre el autor y el portal (puede ser ficticio).
-
-La fotografía del autor que muestra en esta vista debe incluirse en el directorio de imágenes **public/images**. Puede ser ficticia. 
-
-Para probar este desarrollo, el alumno puede conectarse con el navegador a la URL **http://localhost:3000/credits**. Debe mostrar la vista de créditos dentro del marco de aplicación.
-
-### Tarea 6 - Crear los elementos MVC de la primitiva GET /posts. 
-
-Esta primitiva se usa para obtener un listado de todos los posts almacenados en la base de datos.
-
-#### El Modelo:
-
-Empecemos con el desarrollo del modelo, es decir, la base de datos y el acceso a ella. Se debe crear una base de datos **SQLite** a la que se accederá usando **Sequelize**. Por tanto, el alumno necesita instalar los paquetes **sqlite3**, **sequelize** y **sequelize-cli**:
-
-```
-$ npm install sqlite3 sequelize sequelize-cli
-```
-
-El alumno debe crear el fichero **models/index.js** para configurar **Sequelize** y definir el modelo **Post**. 
-
-El contenido del fichero **models/index.js** es muy parecido al realizado en la entrega 5 de bases de datos. Se requerirá el paquete **sequelize**, se creará una instancia de **Sequelize** que maneje la base de datos **SQLite** alojada en el fichero **post.sqlite**, se definirá el modelo **Post** con los campos **title** y **body**, y se exportará la instancia **sequelize** creada.
-
-El alumno también debe crear una migración que cree la tabla **Posts** en la base de datos. Esta migración será muy parecida a la desarrollada en la entrega 5 de bases de datos, pero excluyendo el campo **authorId**. El fichero de migración a crear debe llamarse **migrations/YYYYMMDDhhmmss-CreatePostsTable.js**, donde YYYYMMDDhhmmss es la fecha en la que se creo el fichero. Para crear este fichero puede usar el comando:
-
-```
-npx sequelize migration:create --name  CreatePostsTable
-```
-
-El alumno también debe crear un fichero seeder que añada los posts iniciales descritos al principio de este documento a la tabla Posts. Este fichero seeder es muy parecido al desarrollado en la entrega 5 de bases de datos, pero excluyendo el campo **authorId**. Recuerde que se deben crear los campos **id**, **title**, **body**, **createdAt** y **updatedAt**.
-
-```
-title: 'Sobre esta Práctica' - body: 'El objetivo de esta práctica es crear el esqueleto común, incorporar la página del CV, y el recurso Post con adjunto.'
-```
-
-El fichero seeder a crear debe llamarse **seeders/YYYYMMDDhhmmss-FillPostsTable.js**, donde YYYYMMDDhhmmss es la fecha en la que se creo el fichero. Para crear este fichero puede usar el comando:
-
-```
-npx sequelize seed:generate --name FillPostsTable
-```
-
-El alumno debe crear en **package.json** (dentro del directorio `post_express`) los siguientes scripts para aplicar la migración y el seeder (hay versiones para unix y para windows):
-
-```
-  "migrate": "sequelize db:migrate --url sqlite://$(pwd)/post.sqlite",  
-  "seed": "sequelize db:seed:all --url sqlite://$(pwd)/post.sqlite",  
-  "migrate_win": "sequelize db:migrate --url sqlite://%cd%/post.sqlite",  
-  "seed_win": "sequelize db:seed:all --url sqlite://%cd%/post.sqlite"  
-```
-
-Para ejecutar la migración y el seeder invocar los comandos:
-
-```
-$ npm run migrate  
-$ npm run seed
-```
-
-o su versión con **_win** para máquinas con Windows.
-
-Nota: El comando sequelize tiene un fallo y no permite que existan espacios en blanco en la URL que apunta al fichero **post.sqlite**. Desarrolle esta práctica en un directorio cuya ruta absoluta no contenga espacios en blanco
-
-#### La Ruta:
-
-El alumno debe editar el fichero **routes/index.js** para definir la ruta **GET /posts**.
-Use **routes** y su método **get**. El primer parámetro es el path de la ruta, es decir, **"/posts"**. 
-
-El segundo parámetro es la función middleware que debe renderizar el listado de posts. 
-
-El método middleware debe desarrollarse en un fichero controlador llamado **controllers/post.js** (debe crear el directorio `controllers`), y debe llamarse **index**.
-
-El fichero **routes/index.js** debe requerir el fichero **controllers/post.js** para poder acceder al método **index** que exporta.
-
-#### El Controlador
-
-El alumno debe crear el directorio **controllers** y un nuevo fichero **post.js** donde desarrollará los middlewares relacionados con los posts, que en nuestro caso solo es uno, y se debe llamar **index**.
-
-El fichero **controllers/post.js** debe requerir el módulo **models** (**models/index.js**) para poder acceder al modelo **Post**. 
-
-Se debe definir y exportar el middleware **index** en el controlador **controllers/post.js**. Este middleware debe obtener todos los posts existentes en la base de datos usando **findAll**, y renderizar la vista **views/posts/index.ejs** con los posts obtenidos usando el método **res.render**.
-
-```
-  exports.index = async (req, res, next) => {???};
-```
-
-#### La Vista
-
-El alumno debe crear el directorio **posts** dentro del directorio **views**, y añadir en dicho directorio el fichero **index.ejs** que implementa la vista de una lista de posts. 
-Esta vista debe ser un elemento HTML de tipo **\<section\>** que muestre un título y la lista de posts.
-
-El título debe ser una cabecera **h2** con el texto "*Lista de Posts*".
-
-La vista recibirá la lista de posts a mostrar como un array de posts, que será el mismo array que devolvió la llamada **findAll**. Debe usarse un bucle o un iterador para generar el HTML que muestra la lista de posts.
-
-Cada post se mostrará en una línea con la pregunta y la respuesta separadas por dos puntos. Por ejemplo, "**Capital de Italia: Roma**".
+La vista **views/posts/index.ejs** también debe tener un botón que permita crear nuevos posts. Este botón invocará
+la primitiva **GET /posts/new**.
 
 #### Probar
 
-Ahora el servidor debe responder a la petición **http://localhost:3000/posts** mostrando el listado de todos los posts.
+Ahora el servidor debe responder a la petición **GET http://localhost:3000/posts** mostrando el listado de todos los posts.
+
+### Tarea 5 - Desarrollar el autoload del parámetro de ruta :postId
+
+Algunas de las definiciones de rutas usan un parámetro de ruta llamado **:postId**.
+
+En esta tarea se desarrollará el método **load** del controlador de los posts. Este método
+saca de la BBDD el post cuyo **id** es igual al valor pasado en el parámetro de ruta **:postId**, y los guardará
+en el atributo **load** del objeto **req**, llamándolo **post**, es decir, el objeto post recuperado de la BBDD estará
+disponible en **req.load.post**.
+El atributo **load** de **req** almacena todos los objetos
+precargados, y el del post es **post**.
+Este post lo usarán los metodos **show**, **edit**, **update** y **delete** del controlador post.
+
+El middleware **load** debe buscar el post en la BBDD usando el método **findByPk**, guardarlo en
+**req.load.post**, y llamar a **next** para continuar la ejecución de los siguientes middlewares.
+
+En la llamada a **findByPk** debe cargarse también la imagen adjunta usando la opción **include**.
+
+En el caso de que no exista el post buscado, debe llamarse a next con un mensaje de error informativo para que la ejecución 
+continue en el siguiente middleware de atención de errores.
+
+### Tarea 6 - Desarrollar la primitiva GET /posts/:postId
+
+El servidor debe devolver una página mostrando el post de la BBDD cuyo **id** es igual al valor pasado 
+en el parámetro de ruta **:postId** cuando reciba la petición HTTP **GET /posts/:postId**.
+
+Esta ruta debe definirse en el fichero **routes/index.js**.
+
+El método middleware que atiende esta peticiónes deben desarrollarse en el
+fichero controlador **controllers/post.js**, y debe llamarse **show**.
+
+El middleware **show** debe recuperar el post a mostrar de **req.load.post**, donde ya fue
+precargado con el middleware **load**.
+A continuación enviará una respuesta HTTP renderizando
+la vista **views/posts/show.ejs**, pasando como parámetro el objeto post.
+
+La vista **views/posts/show.ejs** toma como parámetro el post a mostrar.
+
+Esta vista mostrará el título, el cuerpo y la imagen adjunta del post.
+
+Para pintar la imagen adjunta se usará la vista **views/attachments/attachment.ejs**, que es igual a la desarrollada en 
+el mini proyecto **Quiz**.
+
+#### Probar
+
+Ahora el servidor debe responder a la petición **http://localhost:3000/posts/1** mostrando el post con id igual a 1. 
+Puede usar otros valores de id.
+
+### Tarea 7 - Desarrollar la primitiva de creación y edicion de posts
+
+Las primitivas usadas para crear un post son:
+
+* `GET /posts/new`
+    * Muestra una página con un formulario para crear un nuevo post.
+* `POST /posts`
+    * Invocado por el formulario anterior para crear un post con los datos introducidos.
+
+Las primitivas usadas para editar un post son:
+
+* `GET /posts/:postId(\\d+)/edit`
+    * Muestra una página con un formulario para editar el post cuyo **id** es igual al valor pasado en el parámetro de ruta **:postId**.
+* `PUT /posts/:postId(\\d+)`
+    * Invocado por el formulario anterior para actualizar el post con **id** igual a **:postId**.
+  
+La última primitiva usa el método **PUT**, que no está soportado por los formularios HTML. 
+Es necesario instalar el paquete **method-override** para soportar el método
+**PUT** que necesitamos, y el método **DELETE** que usaremos más adelante para borrar los posts.
+
+El alumno debe ejecutar el siguiente comando para instalar el paquete **method-override**:
+
+    $ npm install method-override
+
+y añadir las siguientes sentencia en **app.js** para importarlo y configurarlo:
+
+    . . .
+    var methodOverride = require('method-override');
+    . . .
+    app.use(methodOverride('_method', {methods: ["POST", "GET"]}));
+    . . .
+
+Los middlewares que atienden las primitivas anteriores deben desarrollarse en el fichero 
+controlador **controllers/post.js**, y deben llamarse **new**, **create**, **edit** y **update**.
+
+El middleware **new** enviará un formulario al navegador renderizando la vista **views/posts/new.ejs**. Esta vista debe incluir al menos un campo input type text con id "title" y name "title" y un campo textarea con id "body" y name "body" y un campo input type "submit" y name "enviar" e id "enviar"
+
+El middleware **create** creará un nuevo post con los datos introducidos en el formulario **new**. 
+En caso de que se produzcan errores de validación, debe presentarse el formulario otra vez para que el usuario corrija
+los errores detectados.
+Si en la petición HTTP se recibe un fichero de imagen adjunto, debe guardarse en la tabla de **Attachments** y asociarlo con el post creado.
+Si la creación del post se realiza con éxito, este middleware responderá al navegador con una solicitud de redirección a la
+ruta **/posts/:postId** para mostrar el post creado.
+
+El middleware **edit** sacará de la BBDD el objeto **post** indicado por el parámetro de ruta **:postId**, y enviará un 
+formulario al navegador renderizando la vista **views/posts/edit.ejs**. Esta vista toma como argumento el objeto **post**
+a editar. Esta vista debe incluir al menos un campo input type text con id "title" y name "title" y un campo textarea con id "body" y name "body" y un campo input type "submit" y name "enviar" e id "enviar".
+
+El middleware **update** sacará de la BBDD el objeto **post** indicado por el parámetro de ruta **:postId**, actualizará sus
+propiedades con los valores introducidos en el formulario **edit**, y actualizará los valores en la BBDD.
+Si se producen errores de validación, se presentará el formulario otra vez para que el usuario los corrija.
+Si en la petición HTTP se recibe un fichero de imagen adjunto, debe borrarse el adjunto antiguo de la tabla de **Attachments**,
+guardar el nuevo adjunto, y actualizar la asociación.
+Si la actualización del post se realiza con éxito, este middleware respondera al navegador con una solicitud de redirección a la
+ruta **/posts/:postId** para mostrar el post editado.
+
+La acción de los formularios **new** y **edit** debe invocar las primitivas que activan los middlewares **create** y **update**, usando 
+los métodos **POST** y **PUT** y las rutas adecuadas. 
+Ambos formularios usan una codificación multiparte para subir la imagen adjunta del post que muestran.
+Los campos de los formularios **new** y **edit** son iguales, por lo que se escribirán en un fichero común (**views/posts/_form.ejs**) 
+que importarán las vistas **views/posts/new.ejs** y **views/posts/edit.ejs**.
+Los nombres que deben usar los formularios para enviar los valores al servidor son **title** para el título, **body** para el cuerpo,
+y **image** para el fichero adjunto. Estos nombre son los valores del atributo **name** de las entradas del formulario.
+
+Las imágenes adjuntas de los posts se suben al servidor cuando se ejecutan los middlewares
+**create** y **update**. Las peticiones que reciben estos middlewares llevan
+un cuerpo multiparte, donde una de las partes es el fichero que se está subiendo.
+Para extraer el fichero subido debe usarse el paquete **multer**.
+Las imágenes subidas por los formularios deben identificarse usando el atributo **name=image**.
+
+Para instalar el paquete multer debe ejecutar el comando:
+
+
+    $ npm install multer
+
+y debe importarlo, configurarlo y usarlo solo en las rutas de creación y actualización de **routes/index.js**.
+
+Configure **multer** para que las imágenes se reciban en memoria, y no se acepten
+imágenes mayores de 20MB.
+Esta configuración es idéntica a la usada en el mini proyecto **Quiz**.
+
+Las vistas **views/posts/new.ejs** y **views/posts/edit.ejs** toman como parámetro un objeto 
+post con los valores a editar.
+
+#### Probar
+
+Ahora el servidor debe responder a las peticiones **http://localhost:3000/posts/new** y **http://localhost:3000/posts/1/edit** 
+para obtener los formulario de creación y de edición de post, 
+y a las peticiones **POST http://localhost:3000/posts** y **PUT http://localhost:3000/posts/1** para crear o actualizar un post.
+
+
+### Tarea 8 - Desarrollar la primitiva DELETE /posts/:postId
+
+El servidor debe borrar de la BBDD el post cuyo **id** es igual al valor pasado
+en el parámetro de ruta **:postId** cuando reciba la
+petición HTTP **DELETE /posts/:postId**.
+
+Si el post a borrar tiene una imagen adjunta, entonces tambien debe borrarse de la tabla **Attachments**.
+
+La ruta de esta petición debe definirse en el fichero **routes/index.js**.
+
+El método middleware que atiende esta petición debe desarrollarse en el
+fichero controlador **controllers/post.js**, y debe llamarse **destroy**. 
+Este middleware borrará el post y su imagen adjunta, y responderá al navegador con una solicitud de redirección a la
+ruta **/posts** para mostrar la lista de posts existentes.
+
+
+#### Probar
+
+Ahora el servidor debe responder a la petición **DELETE http://localhost:3000/posts/1**.
+Puede usar otros valores de id.
 
 ## Prueba de la práctica
 
 Para ayudar al desarrollo, se provee una herramienta de autocorrección que prueba las distintas funcionalidades que se piden en el enunciado. Para utilizar esta herramienta debes tener node.js (y npm) (https://nodejs.org/es/) y Git instalados.
 
-Para instalar y hacer uso de la herramienta de autocorrección en el ordenador local, ejecuta los siguientes comandos en el directorio raíz del proyecto, es decir, en el directorio padre del directorio **post_express**:
+Para instalar y hacer uso de la herramienta de autocorrección en el ordenador local, ejecuta los siguientes comandos en el directorio raíz del proyecto, es decir, en el directorio padre del directorio **post**:
 
-```
-$ sudo npm install -g autocorector    ## Instala el programa de test
-$ autocorector                   ## Pasa los tests al fichero a entregar
-............................     ## en el directorio de trabajo
-... (resultado de los tests)
-```
+    $ sudo npm install -g autocorector    ## Instala el programa de test
+    $ autocorector                   ## Pasa los tests al fichero a entregar
+    ............................     ## en el directorio de trabajo
+    ... (resultado de los tests)
 
 También se puede instalar como paquete local, en el caso de que no dispongas de permisos en 
 el ordenador en el que estás trabajando:
 
-```
-$ npm install autocorector     ## Instala el programa de test
-$ npx autocorector             ## Pasa los tests al fichero a entregar
-............................   ## en el directorio de trabajo
-... (resultado de los tests)
-```
+    $ npm install autocorector     ## Instala el programa de test
+    $ npx autocorector             ## Pasa los tests al fichero a entregar
+    ............................   ## en el directorio de trabajo
+    ... (resultado de los tests)
 
 Se puede pasar la herramienta de autocorrección tantas veces como se desee sin ninguna repercusión en la calificación.
 
@@ -313,90 +384,29 @@ Se puede pasar la herramienta de autocorrección tantas veces como se desee sin 
 
 Una vez satisfecho con su calificación, el alumno puede subir su entrega a Moodle con el siguiente comando:
 
-```
-$ autocorector --upload
-```
+    $ autocorector --upload
 
 o, si se ha instalado como paquete local:
 
-```
-$ npx autocorector --upload
-```
+    $ npx autocorector --upload
 
 La herramienta de autocorrección preguntará por el correo del alumno y el token de Moodle. 
 En el enlace **https://www.npmjs.com/package/autocorector** se proveen instrucciones para encontrar dicho token.
 
 **RÚBRICA**: Se puntuará el ejercicio a corregir sumando el % indicado a la nota total si la parte indicada es correcta:
 
-- **10%:** Integracion de express-partials
-- **10%:** Scripts de package.json
-- **10%:** Petición /
-- **20%:** Petición /credits
-- **10%:** Eliminar petición /users
-- **40%:** Petición /posts
+- **10%:** Las plantillas express-partials tienen los componentes adecuados
+- **5%:** Se atiende la petición GET / y muestra la página de bienvenida
+- **5%:** Se atiende la petición GET /author y muestra el cv del alumno
+- **10%:** Se atiende la petición GET /posts y se muestran todos los posts.
+- **10%:** Se atiende la petición GET /posts/:postId que muestra el post pedido.
+- **5%:** La peticion GET /posts/:postId de un post inexistente informa de que no existe (404 not found).
+- **5%:** Se atiende la petición GET /posts/new y muestra los campos del formulario new.
+- **10%:** La petición POST /posts crea un nuevo post.
+- **10%:** No puede crearse un post con campos vacios. TODO
+- **10%:** Se atiende la petición GET /posts/:postId/edit y muestra los campos del formulario bien rellenos.
+- **10%:** La petición PUT /posts/:postId actualiza el post
+- **10%:** La petición DELETE /posts/:postId borra el post indicado
 
 Si pasa todos los tests se dará la máxima puntuación.
 
-
-# TODO
-
-* Actualizar el enunciado. He cambiado las referencias de quiz a post, y he actualizado algunos campos, pero habría que darle una vuelta. Hay que darles las migraciones, seeders, etc. en el enunciado.
-
-Esta es la salida del autocorrector **en este momento**:
-
-```
-Test: 6: Comprobar que las plantillas express-partials tienen los componentes adecuados
-        Puntuación: 1/1
-
-Tests funcionales
-
-Test: 7: Comprobar que se resuelve una petición a / con código 200
-        Puntuación: 0.25/0.25
-        Observaciones: Respuesta correcta
-
-Test: 8: Comprobar que se resuelve una petición a /posts con código 200
-        Puntuación: 0.25/0.25
-        Observaciones: Respuesta correcta
-
-Test: 9: Comprobar que se resuelve una petición a /author con código 200
-        Puntuación: 0.25/0.25
-        Observaciones: Respuesta correcta
-
-Test: 10: Comprobar que se resuelve una petición a /users con código 404
-        Puntuación: 0.25/0.25
-        Observaciones: Respuesta correcta
-
-Test: 11: Comprobar que se muestran los posts
-        Puntuación: 2/2
-        Observaciones: ¡Enhorabuena!
-
-Test: 12: Comprobar que se pueden editar los posts
-        Puntuación: 3/3
-        Observaciones: ¡Enhorabuena!
-
-Test: 13: Comprobar que se pueden borrar los posts
-        Puntuación: 3/3
-        Observaciones: ¡Enhorabuena!
-
-Resultado Final: 10/10
-```
-
-
-Estas son las instrucciones ~originales~ del enunciado:
-
-```
-Enunciado Practica 6
-
-Tareas:
-  1 - Partir de la P5
-      Y aplicar los cambios realizados en el miniproyecto del esqueleto.
-  2 - Crear el recurso Posts con adjuntos.
-      Modelos: Post(title, body, ...) y Attachment (mime, imagen, ...).
-      Usar migraciones.
-      API REST tipico: /posts/.....
-
-Evaluacion:
-
-  Comprobar la existencia de los enlaces.
-  Probar la API.
-```

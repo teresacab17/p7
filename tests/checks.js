@@ -8,19 +8,13 @@ const spawn = require("child_process").spawn;
 const util = require('util');
 const exec = util.promisify(require("child_process").exec);
 
-
 const PATH_ASSIGNMENT = path_assignment("blog");
-
-
 const URL = `file://${path.resolve(path.join(PATH_ASSIGNMENT.replace("%", "%25"), "cv.html"))}`;
 // Should the server log be included in the logs?
-const LOG_SERVER = from_env("LOG_SERVER") !== "undefined";
 const TIMEOUT =  parseInt(from_env("TIMEOUT", 2000));
 const TEST_PORT =  parseInt(from_env("TEST_PORT", "3001"));
 
-
 let browser = create_browser();
-
 
 describe("Tests Práctica 2", function() {
     after(function () {
@@ -123,9 +117,9 @@ describe("Tests Práctica 2", function() {
             // Crear base de datos nueva y poblarla antes de los tests funcionales. por defecto, el servidor coge post.sqlite del CWD
             try {
                 fs.unlinkSync(db_file);
-                console.log('Previous test db removed. It is going to be created a new one ')
+                console.log('Previous test db removed. A new one is going to be created.')
             } catch {
-                console.log('Previous test db does not exist. It is going to be created a new one.')
+                console.log('Previous test db does not exist. A new one is going to be created.')
             }
             fs.closeSync(fs.openSync(db_file, 'w'));
 
@@ -145,7 +139,7 @@ describe("Tests Práctica 2", function() {
                 log('Salida del servidor: ', data);
             })
             server.stderr.on('data', function (data) {
-                log('stderr: ' + data);
+                log('EL SERVIDOR HA DADO UN ERROR. SALIDA stderr: ' + data);
             });
             log(`Lanzado el servidor en el puerto ${TEST_PORT}`);
             await new Promise(resolve => setTimeout(resolve, 20000));
@@ -162,46 +156,49 @@ describe("Tests Práctica 2", function() {
         after(async function() {
             // Borrar base de datos
             await server.kill();
+            function sleep(ms) {
+                return new Promise((resolve) => {
+                  setTimeout(resolve, ms);
+                });
+              }
+              //wait for 1 second for the server to release the sqlite file
+             await sleep(1000);
+
             try {
                 fs.unlinkSync(db_file);
-            } catch {
-                console.log('Test db not removed')
+            } catch(e){
+                console.log("Test db not removed.");
+                console.log(e);
+                throw(e);
             }
         })
 
-        var endpoints = [
-            ["/", 200],
-            ["/posts", 200],
-            ["/author", 200],
-            ["/users", 404],
-            // Estas dos se comprueban en tests independientes
-            // ["/posts/new", 200],
-            // ["/posts/1/edit", 200],
-        ];
+        scored(`Comprobar que se muestran la página de bienvenida`, 0.5, async function () {
+            this.msg_err = 'No se muestra la página de bienvenida al visitar /';
 
-        for (idx in endpoints) {
-            let endpoint = endpoints[idx][0]
-            let code = endpoints[idx][1]
-            let num = 8 + parseInt(idx);
-            scored(`Comprobar que se resuelve una petición a ${endpoint} con código ${code}`,
-                   0.25, async function () {
-                this.msg_ok = 'Respuesta correcta';
-                this.msg_err = 'No hubo respuesta';
-                check = function(){
-                    browser.assert.status(code);
-                }
-                return browser.visit(endpoint)
-                    .then(check)
-                    .catch(check);
-            })
-        }
+            await browser.visit("/");
+            browser.assert.status(200)
+            browser.assert.element('header#mainHeader.main');
+        })
 
-        scored(`Comprobar que se muestran los posts`,
-               2, async function () {
+        scored(`Comprobar que se muestran el cv del alumno al visitar /author`, 0.5, async function () {
+            this.msg_err = 'No se muestra el cv del alumno al visitar /';
+
+            await browser.visit("/author");
+            browser.assert.status(200)
+
+            //res = browser.html();
+            //this.msg_err = `No se encuentra contenido XXX en la página de bienvenida`;
+            //res.includes(post.title).should.be.equal(true);
+        });
+
+        scored(`Comprobar que se muestran los posts`, 1, async function () {
             this.msg_err = 'No se muestra la página con los posts';
             let posts = [
-                {id: 1, title: "Sobre esta Práctica", body: "El objetivo de esta práctica es crear el esqueleto común, incorporar la página del CV, y el recurso Post con adjunto."},
-            ]
+                {id: 1, title: "Primer Post", body: "Esta práctica implementa un Blog."},
+                { id:2, title: 'Segundo Post', body: 'Todo el mundo puede crear posts.' },
+                { id:3, title: 'Tercer Post', body: 'Cada post puede tener una imagen adjunta.'}
+            ];
 
             await browser.visit("/posts");
             browser.assert.status(200)
@@ -211,41 +208,132 @@ describe("Tests Práctica 2", function() {
             for (idx in posts) {
                 let post = posts[idx];
                 this.msg_err = `No se encuentra el post "${post.title}" en los posts`;
-                res.includes(post.title).should.be.equal(true);
-                await browser.visit("/posts/" + post.id);
-                this.msg_err = `La página del post "${post.title}" (/posts/${post.id}) no incluye el cuerpo correctamente`;
-                browser.html().includes(post.body).should.be.equal(true);
+                res.includes(post.title).should.be.equal(true);                
             }
         })
 
-        scored(`Comprobar que se pueden editar los posts`,
-               3, async function () {
-                   this.msg_err = 'No se muestra la página con los posts';
+        scored(`Comprobar que se muestra la página individual de cada posts`, 1, async function () {
+            let posts = [
+                {id: 1, title: "Primer Post", body: "Esta práctica implementa un Blog."},
+                { id:2, title: 'Segundo Post', body: 'Todo el mundo puede crear posts.' },
+                { id:3, title: 'Tercer Post', body: 'Cada post puede tener una imagen adjunta.'}
+            ];
+
+            for (idx in posts) {
+                let post = posts[idx];
+                this.msg_err = `No se encuentra el post "${post.title}" en los posts`;
+                await browser.visit("/posts/" + post.id);
+                this.msg_err = `La página del post "${post.title}" (/posts/${post.id}) no incluye el cuerpo correctamente`;
+                console.log("browser.html(): ", browser.html());
+                browser.assert.element('article.postShow');
+                browser.html().includes(post.body).should.be.equal(true);
+
+            }
+        })
+
+        scored(`Comprobar que se visitar la página de un post inexistente devuelve 404 not found`, 0.5, async function () {
+            this.msg_err = 'No se 404 al visitar la página de un post inexistente';
+
+            await browser.visit("/posts/100");
+            browser.assert.status(404);
+        })
+
+        scored(`Comprobar que se muestran la página creación de un post /posts/new`, 0.5, async function () {
+            this.msg_err = 'No se muestra la página de creación de un post al visitar /posts/new';
+
+            await browser.visit("/posts/new");
+            browser.assert.status(200);
+
+            //res = browser.html();
+            //this.msg_err = `No se encuentra contenido XXX en la página de bienvenida`;
+            //res.includes(post.title).should.be.equal(true);
+        })
+
+        scored(`Comprobar que se crea un nuevo post en la base de datos al mandar el formulario /posts/new`, 1, async function () {
+            this.msg_err = 'No se crea un nuevo post al mandar /posts/new';
+
+            await browser.visit("/posts/new");
+            browser.assert.status(200);
+
+            this.msg_err = `La página /posts/new no incluye el formulario de creación de un post correcto`;
+            browser.assert.element('#title');
+            browser.assert.element('#body');
+            browser.assert.element('#enviar');
+            await browser.fill('#title','Mi titulo');
+            await browser.fill('#body', 'Mi cuerpo');
+            await browser.pressButton('#enviar');
+            browser.assert.status(200);
+            log("POST CREADO. URL devuelta: " + browser.location.href);
+            browser.location.href.includes('/posts/4').should.be.equal(true);
+        })
+
+
+        scored(`Comprobar que NO se crea un nuevo post en la base de datos al mandar el formulario /posts/new con los campos vacíos`, 1, async function () {
+            this.msg_err = 'No falla al intentar crear un nuevo post al mandar /posts/new con los campos vacíos';
+
+            await browser.visit("/posts/new");
+            browser.assert.status(200);
+
+            this.msg_err = `La página /posts/new no incluye el formulario de creación de un post correcto`;
+            browser.assert.element('#title');
+            browser.assert.element('#body');
+            browser.assert.element('#enviar');
+            await browser.pressButton('#enviar');
+            browser.assert.status(200);
+            this.msg_err = `La página a la que ha redirigido el intento de creación de un post vacío no incluye el formulario de creación de un post correcto`;
+            log("POST CREADO. URL devuelta: " + browser.location.href);
+            //check that the return page contains the form
+            browser.assert.element('#title');
+            browser.assert.element('#body');
+            browser.assert.element('#enviar');
+        })
+        
+
+        scored(`Comprobar que se atiende a la petición GET de /posts/:postId/edit`, 1, async function () {
                    let posts = [
-                       {id: 1, title: "Sobre esta Práctica", body: "El objetivo de esta práctica es crear el esqueleto común, incorporar la página del CV, y el recurso Post con adjunto."},
-                   ]
-
-                   await browser.visit("/posts");
-                   browser.assert.status(200)
-
-                   res = browser.html();
+                        {id: 1, title: "Primer Post", body: "Esta práctica implementa un Blog."},
+                        { id:2, title: 'Segundo Post', body: 'Todo el mundo puede crear posts.' },
+                        { id:3, title: 'Tercer Post', body: 'Cada post puede tener una imagen adjunta.'}
+                    ];
 
                    for (idx in posts) {
                        let post = posts[idx];
-                       this.msg_err = `No se encuentra el post "${post.title}" en los posts`;
-                       res.includes(post.title).should.be.equal(true);
                        await browser.visit(`/posts/${post.id}/edit`);
                        this.msg_err = `La página del post "${post.title}" (/posts/${post.id}) no parece permitir editar correctamente`;
+                       this.msg_err = `La página /posts/new no incluye el formulario de creación de un post correcto`;
+                       browser.assert.element('#title');
+                       browser.assert.element('#body');
+                       browser.assert.element('#enviar');
                        browser.html().includes(post.body).should.be.equal(true);
                    }
                })
-        scored(`Comprobar que se pueden borrar los posts`,
-               3, async function () {
-                   this.msg_err = 'No se muestra la página con los posts';
-                   let posts = [
-                       {id: 1, title: "Sobre esta Práctica", body: "El objetivo de esta práctica es crear el esqueleto común, incorporar la página del CV, y el recurso Post con adjunto."},
-                   ]
 
+        scored(`Comprobar que se edita un  post en la base de datos al mandar el formulario /posts/1/edit`, 1, async function () {
+                this.msg_err = 'No se edita un post al mandar /posts/1/edit';
+    
+                await browser.visit("/posts/1/edit");
+                browser.assert.status(200);
+    
+                this.msg_err = `La página /posts/1/edit no incluye el formulario de creación de un post correcto`;
+                browser.assert.element('#title');
+                browser.assert.element('#body');
+                browser.assert.element('#enviar');
+                await browser.fill('#title','Mi titulo2');
+                await browser.fill('#body', 'Mi cuerpo2');
+                await browser.pressButton('#enviar');
+                browser.assert.status(200);
+                log("POST EDITADO. URL devuelta: " + browser.location.href);
+                browser.location.href.should.be.equal(`http://localhost:${TEST_PORT}/posts/1`);
+                browser.html().includes('Mi titulo2').should.be.equal(true);
+        })
+
+        scored(`Comprobar que se pueden borrar los posts`, 1, async function () {
+                   this.msg_err = 'No se muestra la página con los posts';
+                   //this time we don´t use post number 1 because it was edited in the previous test
+                   let posts = [
+                        { id:2, title: 'Segundo Post', body: 'Todo el mundo puede crear posts.' },
+                        { id:3, title: 'Tercer Post', body: 'Cada post puede tener una imagen adjunta.'}
+                    ];
 
                    var total = posts.length;
 
