@@ -6,7 +6,7 @@
 
 # Práctica 6: Posts
 
-Versión: 7 de Febrero de 2022
+Versión: 16 de Marzo de 2022
 
 ## Objetivos
 * Afianzar los conocimientos obtenidos sobre el uso de Express para desarrollar servidores web.
@@ -44,6 +44,9 @@ En la práctica 6 deben añadirse las siguiente primitivas al interfaz REST:
     * Invocado por el formulario anterior para actualizar el post con **id** igual a **:postId**.
 * `DELETE /posts/:postId(\\d+)`
     * Borrar de la BBDD el post cuyo **id** es igual a **postId**.
+* `GET /posts/:postId(\\d+)/attachment`
+    * Devuelve la imagen adjunta del post cuyo **id* es igual a **postId**, y si no existe, devuelve una imagen por defecto situada en **public/images/none.png**.
+
   
 Se seguirá el patrón MVC, creando los modelos, controladores, rutas y vistas que se necesiten para gestionar los posts.
 
@@ -100,7 +103,7 @@ El alumno debe crear el fichero **models/index.js**.
 El contenido del fichero **models/index.js** es muy parecido al realizado en el mini proyecto **Quiz**. 
 Se requerirá el paquete **sequelize**, se creará una instancia de **Sequelize** que maneje la base de datos **SQLite** 
 alojada en el fichero **blog.sqlite**, se definirá el modelo **Post** con los campos **title** y **body**, se definirá 
-el modelo **Attachment** con los campos **mime** e **image**, se definira la relación 1-a-1 entre **Post** y **Attachment**
+el modelo **Attachment** con los campos **mime**, **url** e **image**, se definira la relación 1-a-1 entre **Post** y **Attachment**
 y se exportará la instancia **sequelize** creada.
 
 El tipo del campo **image** del modelo **Attachment** debe ser **BLOB('long')**, y su contenido serán los bytes de la
@@ -163,7 +166,45 @@ Además debe añadir un nuevo botón con el texto **Posts**.
 Al pulsar este botón, se enviara la primitiva **GET /posts** para navegar a la página que muestra un listado con 
 los posts existentes.
 
-### Tarea 4 - Desarrollar la primitiva GET /posts
+### Tarea 4 - Desarrollar el autoload del parámetro de ruta :postId
+
+Algunas de las definiciones de rutas usan un parámetro de ruta llamado **:postId**.
+
+En esta tarea se desarrollará el método **load** del controlador de los posts. Este método
+saca de la BBDD el post cuyo **id** es igual al valor pasado en el parámetro de ruta **:postId**, y los guardará
+en el atributo **load** del objeto **req**, llamándolo **post**, es decir, el objeto post recuperado de la BBDD estará
+disponible en **req.load.post**.
+El atributo **load** de **req** almacena todos los objetos
+precargados, y el del post es **post**.
+Este post lo usarán los metodos **show**, **edit**, **update**, **delete** y **attachment** del controlador post.
+
+El middleware **load** debe buscar el post en la BBDD usando el método **findByPk**, guardarlo en
+**req.load.post**, y llamar a **next** para continuar la ejecución de los siguientes middlewares.
+
+En la llamada a **findByPk** debe cargarse también la imagen adjunta usando la opción **include**.
+
+En el caso de que no exista el post buscado, debe llamarse a next con un mensaje de error informativo para que la ejecución 
+continue en el siguiente middleware de atención de errores.
+
+
+### Tarea 5 - Desarrollar la primitiva GET /posts/:postId/attachment
+
+La imagen adjunta de un post se almacena en el campo **image** de la tabla **Attachments** como un string codificado en **base64**. Para mostrar esta imagen en un fichero HTML, se debe usar una etiqueta **img** con una URL que contenga el MIMETYPE y los datos en base64 de la imagen siguiendo el formato:
+
+    <img src="data:MIMETYPE;base64,DATOS"/>
+
+Estas URL son muy largas y los ficheros HTML que las usan son enormes. Para evitar usar estas URL tan largas, se pueden definir rutas para acceder a las imágenes y que oculten esta implementación. Esta estrategia es la que se ha seguido en el mini proyecto **Quiz**, y se pide aplicarla también en esta práctica.
+
+Se pide definir la ruta **GET /posts/:postId/attachment** para acceder a la imagen adjunta de post indicado por el parámetro de ruta **postId**.
+
+Esta ruta debe definirse en el fichero **routes/index.js**.
+
+El método middleware que atiende esta petición debe desarrollarse en el fichero controlador **controllers/post.js**, y debe llamarse **attachment**. Este middleware debe devolver la imagen, y si no existe, devolver una imagen por defecto situada en el directorio  public/images/none.png.
+
+El fichero **routes/index.js** debe requerir/importar el fichero **controllers/post.js** para poder acceder al método **attachment** exportado.
+
+
+### Tarea 6 - Desarrollar la primitiva GET /posts
 
 El servidor debe devolver una página mostrando todos los posts almacenados en la BBDD cuando reciba la 
 petición HTTP **GET /posts**.
@@ -198,27 +239,9 @@ la primitiva **GET /posts/new**.
 
 Ahora el servidor debe responder a la petición **GET http://localhost:3000/posts** mostrando el listado de todos los posts.
 
-### Tarea 5 - Desarrollar el autoload del parámetro de ruta :postId
 
-Algunas de las definiciones de rutas usan un parámetro de ruta llamado **:postId**.
 
-En esta tarea se desarrollará el método **load** del controlador de los posts. Este método
-saca de la BBDD el post cuyo **id** es igual al valor pasado en el parámetro de ruta **:postId**, y los guardará
-en el atributo **load** del objeto **req**, llamándolo **post**, es decir, el objeto post recuperado de la BBDD estará
-disponible en **req.load.post**.
-El atributo **load** de **req** almacena todos los objetos
-precargados, y el del post es **post**.
-Este post lo usarán los metodos **show**, **edit**, **update** y **delete** del controlador post.
-
-El middleware **load** debe buscar el post en la BBDD usando el método **findByPk**, guardarlo en
-**req.load.post**, y llamar a **next** para continuar la ejecución de los siguientes middlewares.
-
-En la llamada a **findByPk** debe cargarse también la imagen adjunta usando la opción **include**.
-
-En el caso de que no exista el post buscado, debe llamarse a next con un mensaje de error informativo para que la ejecución 
-continue en el siguiente middleware de atención de errores.
-
-### Tarea 6 - Desarrollar la primitiva GET /posts/:postId
+### Tarea 7 - Desarrollar la primitiva GET /posts/:postId
 
 El servidor debe devolver una página mostrando el post de la BBDD cuyo **id** es igual al valor pasado 
 en el parámetro de ruta **:postId** cuando reciba la petición HTTP **GET /posts/:postId**.
@@ -245,7 +268,7 @@ el mini proyecto **Quiz**.
 Ahora el servidor debe responder a la petición **http://localhost:3000/posts/1** mostrando el post con id igual a 1. 
 Puede usar otros valores de id.
 
-### Tarea 7 - Desarrollar la primitiva de creación y edicion de posts
+### Tarea 8 - Desarrollar la primitiva de creación y edicion de posts
 
 Las primitivas usadas para crear un post son:
 
@@ -280,7 +303,7 @@ y añadir las siguientes sentencia en **app.js** para importarlo y configurarlo:
 Los middlewares que atienden las primitivas anteriores deben desarrollarse en el fichero 
 controlador **controllers/post.js**, y deben llamarse **new**, **create**, **edit** y **update**.
 
-El middleware **new** enviará un formulario al navegador renderizando la vista **views/posts/new.ejs**. Esta vista debe incluir al menos un campo input type text con id "title" y name "title" y un campo textarea con id "body" y name "body" y un campo input type "submit" y name "enviar" e id "enviar"
+El middleware **new** enviará un formulario al navegador renderizando la vista **views/posts/new.ejs**. Esta vista debe incluir al menos un campo input de type text con id "title" y name "title", un campo textarea con id "body" y name "body", un campo input de type file con id "image" y name "image",  y un campo input type "submit" y name "enviar" e id "enviar"
 
 El middleware **create** creará un nuevo post con los datos introducidos en el formulario **new**. 
 En caso de que se produzcan errores de validación, debe presentarse el formulario otra vez para que el usuario corrija
@@ -291,7 +314,7 @@ ruta **/posts/:postId** para mostrar el post creado.
 
 El middleware **edit** sacará de la BBDD el objeto **post** indicado por el parámetro de ruta **:postId**, y enviará un 
 formulario al navegador renderizando la vista **views/posts/edit.ejs**. Esta vista toma como argumento el objeto **post**
-a editar. Esta vista debe incluir al menos un campo input type text con id "title" y name "title" y un campo textarea con id "body" y name "body" y un campo input type "submit" y name "enviar" e id "enviar".
+a editar. Esta vista debe incluir al menos un campo input de type text con id "title" y name "title", un campo textarea con id "body" y name "body", un campo input de type "file" con id "image" y name "image",  y un campo input type "submit" y name "enviar" e id "enviar".
 
 El middleware **update** sacará de la BBDD el objeto **post** indicado por el parámetro de ruta **:postId**, actualizará sus
 propiedades con los valores introducidos en el formulario **edit**, y actualizará los valores en la BBDD.
@@ -336,7 +359,7 @@ para obtener los formulario de creación y de edición de post,
 y a las peticiones **POST http://localhost:3000/posts** y **PUT http://localhost:3000/posts/1** para crear o actualizar un post.
 
 
-### Tarea 8 - Desarrollar la primitiva DELETE /posts/:postId
+### Tarea 9 - Desarrollar la primitiva DELETE /posts/:postId
 
 El servidor debe borrar de la BBDD el post cuyo **id** es igual al valor pasado
 en el parámetro de ruta **:postId** cuando reciba la
@@ -400,7 +423,7 @@ En el enlace **https://www.npmjs.com/package/autocorector** se proveen instrucci
 - **5%:** Se atiende la petición GET /author y muestra el cv del alumno
 - **10%:** Se atiende la petición GET /posts y se muestran todos los posts.
 - **10%:** Se atiende la petición GET /posts/:postId que muestra el post pedido.
-- **5%:** La peticion GET /posts/:postId de un post inexistente informa de que no existe (404 not found).
+- **5%:** La peticion GET /posts/:postId de un post inexistente informa de que no existe.
 - **5%:** Se atiende la petición GET /posts/new y muestra los campos del formulario new.
 - **10%:** La petición POST /posts crea un nuevo post.
 - **10%:** No puede crearse un post con campos vacios. TODO
