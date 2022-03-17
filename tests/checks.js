@@ -224,7 +224,7 @@ describe("Tests Práctica 2", function() {
                 this.msg_err = `No se encuentra el post "${post.title}" en los posts`;
                 await browser.visit("/posts/" + post.id);
                 this.msg_err = `La página del post "${post.title}" (/posts/${post.id}) no incluye el cuerpo correctamente`;
-                console.log("browser.html(): ", browser.html());
+                //console.log("browser.html(): ", browser.html());
                 browser.assert.element('article.postShow');
                 browser.html().includes(post.body).should.be.equal(true);
 
