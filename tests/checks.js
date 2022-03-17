@@ -173,7 +173,7 @@ describe("Tests Práctica 2", function() {
             }
         })
 
-        scored(`Comprobar que se muestran la página de bienvenida`, 0.5, async function () {
+        scored(`Comprobar que se muestra la página de bienvenida`, 0.5, async function () {
             this.msg_err = 'No se muestra la página de bienvenida al visitar /';
 
             await browser.visit("/");
@@ -231,11 +231,11 @@ describe("Tests Práctica 2", function() {
             }
         })
 
-        scored(`Comprobar que se visitar la página de un post inexistente devuelve 404 not found`, 0.5, async function () {
-            this.msg_err = 'No se 404 al visitar la página de un post inexistente';
+        scored(`Comprobar que se devuelve la imagen de un post al hacer un GET a /posts/:postId/attachment`, 0.5, async function () {
+            this.msg_err = 'No se devuelve la imagen de un post al hacer un GET a /posts/:postId/attachment';
 
-            await browser.visit("/posts/100");
-            browser.assert.status(404);
+            await browser.visit("/posts/1/attachment");
+            browser.assert.status(200);
         })
 
         scored(`Comprobar que se muestran la página creación de un post /posts/new`, 0.5, async function () {
