@@ -6,7 +6,7 @@
 
 # Práctica 6: Posts
 
-Versión: 16 de Marzo de 2022
+Versión: 04 de Abril de 2022
 
 ## Objetivos
 * Afianzar los conocimientos obtenidos sobre el uso de Express para desarrollar servidores web.
@@ -259,6 +259,8 @@ la vista **views/posts/show.ejs**, pasando como parámetro el objeto post.
 La vista **views/posts/show.ejs** toma como parámetro el post a mostrar.
 
 Esta vista mostrará el título, el cuerpo y la imagen adjunta del post.
+
+La vista pintará el post dentro de un elemento HTML de tipo **\<article\>** con clase "postShow".
 
 Para pintar la imagen adjunta se usará la vista **views/attachments/attachment.ejs**, que es igual a la desarrollada en 
 el mini proyecto **Quiz**.
