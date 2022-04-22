@@ -16,7 +16,7 @@ const TEST_PORT =  parseInt(from_env("TEST_PORT", "3001"));
 
 let browser = create_browser();
 
-describe("Tests Práctica 2", function() {
+describe("Tests Práctica 6", function() {
     after(function () {
         warn_errors();
     });
@@ -94,13 +94,14 @@ describe("Tests Práctica 2", function() {
                 for(status in checks[fpath]) {
                     elements = checks[fpath][status];
                     for(var elem in elements){
+                        const shouldbe = (status == 'true');
                         let e = elements[elem];
-                        if (status) {
+                        if (shouldbe) {
                             this.msg_err = `${fpath} no incluye ${e}`;
                         } else {
                             this.msg_err = `${fpath} incluye ${e}, pero debería haberse borrado`;
                         }
-                        e.test(templ).should.be.equal((status == 'true'));
+                        e.test(templ).should.be.equal(shouldbe);
                     }
                 }
             }
@@ -142,7 +143,7 @@ describe("Tests Práctica 2", function() {
                 log('EL SERVIDOR HA DADO UN ERROR. SALIDA stderr: ' + data);
             });
             log(`Lanzado el servidor en el puerto ${TEST_PORT}`);
-            await new Promise(resolve => setTimeout(resolve, 20000));
+            await new Promise(resolve => setTimeout(resolve, TIMEOUT));
             browser.site = `http://localhost:${TEST_PORT}/`;
             try{
                 await browser.visit("/");
