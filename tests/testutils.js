@@ -10,7 +10,7 @@ const access = promisify(fs.access);
 const REG_URL = /(\b(http|ftp|https|ftps):\/\/[-A-ZáéíóúÁÉÍÓÚ0-9+&@#\/%?=~_|!:,.;]*[-A-ZáéíóúÁÉÍÓÚ0-9+&@#\/%=~_|])/ig;
 
 // If we are in DEBUG mode, the output will be more verbose
-const DEBUG =  typeof process.env.DEBUG !== "undefined" && (process.env.DEBUG === "true" || process.env.DEBUG === 1);
+const DEBUG =  typeof process.env.DEBUG !== "undefined" && (process.env.DEBUG === "true" || process.env.DEBUG === '1');
 console.log("DEBUG:", DEBUG);
 
 const WAIT =  typeof process.env.WAIT !== "undefined"?parseInt(process.env.WAIT):50000;
