@@ -299,22 +299,24 @@ describe("Tests Práctica 6", function() {
 
                    for (idx in posts) {
                        let post = posts[idx];
+                       this.msg_err = `La página de edición no está disponible`;
                        await browser.visit(`/posts/${post.id}/edit`);
-                       this.msg_err = `La página del post "${post.title}" (/posts/${post.id}) no parece permitir editar correctamente`;
-                       this.msg_err = `La página /posts/new no incluye el formulario de creación de un post correcto`;
+                       browser.assert.status(200);
+                       this.msg_err = `La página /posts/new no muestra el formulario con todos los elementos necesarios (#title, #body, #enviar)`;
                        browser.assert.element('#title');
                        browser.assert.element('#body');
                        browser.assert.element('#enviar');
+                       this.msg_err = `La página no incluye el cuerpo del post`;
                        browser.html().includes(post.body).should.be.equal(true);
                    }
                })
 
         scored(`Comprobar que se edita un  post en la base de datos al mandar el formulario /posts/1/edit`, 1, async function () {
                 this.msg_err = 'No se edita un post al mandar /posts/1/edit';
-    
+
                 await browser.visit("/posts/1/edit");
                 browser.assert.status(200);
-    
+
                 this.msg_err = `La página /posts/1/edit no incluye el formulario de creación de un post correcto`;
                 browser.assert.element('#title');
                 browser.assert.element('#body');
@@ -329,37 +331,35 @@ describe("Tests Práctica 6", function() {
         })
 
         scored(`Comprobar que se pueden borrar los posts`, 1, async function () {
-                   this.msg_err = 'No se muestra la página con los posts';
-                   //this time we don´t use post number 1 because it was edited in the previous test
-                   let posts = [
-                        { id:2, title: 'Segundo Post', body: 'Todo el mundo puede crear posts.' },
-                        { id:3, title: 'Tercer Post', body: 'Cada post puede tener una imagen adjunta.'}
-                    ];
+            //this time we don´t use post number 1 because it was edited in the previous test
+            let posts = [
+                { id:2, title: 'Segundo Post', body: 'Todo el mundo puede crear posts.' },
+                { id:3, title: 'Tercer Post', body: 'Cada post puede tener una imagen adjunta.'}
+            ];
 
-                   var total = posts.length;
+            this.msg_err = 'No se muestra la página con los posts';
+            await browser.visit("/posts");
+            browser.assert.status(200)
+            res = browser.html();
+            this.msg_err = 'El post se sigue mostrando';
+            res.includes(posts[0].title).should.be.equal(true);
 
-                   await browser.visit("/posts");
-                   browser.assert.status(200)
-                   res = browser.html();
-                   res.includes(posts[0].title).should.be.equal(true);
+            for (idx in posts) {
+                let post = posts[idx];
+                this.msg_err = `No se encuentra el post "${post.title}" en los posts`;
 
-                   for (idx in posts) {
+                res.includes(post.title).should.be.equal(true);
 
-                       let post = posts[idx];
-                       this.msg_err = `No se encuentra el post "${post.title}" en los posts`;
+                this.msg_err = `La página del post "${post.title}" (/posts/${post.id}) no parece permitir borrar correctamente`;
+                await browser.visit(`/posts/${post.id}?_method=DELETE`);
 
-                       res.includes(post.title).should.be.equal(true);
-
-                       this.msg_err = `La página del post "${post.title}" (/posts/${post.id}) no parece permitir borrar correctamente`;
-                       await browser.visit(`/posts/${post.id}?_method=DELETE`);
-
-                       this.msg_err = `La página de posts sigue mostrando "${post.title}" (/posts/${post.id}) después de haber sido borrado`;
-                       await browser.visit("/posts");
-                       browser.assert.status(200)
-                       res = browser.html();
-                       res.includes(post.title).should.be.equal(false);
-                   }
-               })
+                this.msg_err = `La página de posts sigue mostrando "${post.title}" (/posts/${post.id}) después de haber sido borrado`;
+                await browser.visit("/posts");
+                browser.assert.status(200)
+                res = browser.html();
+                res.includes(post.title).should.be.equal(false);
+            }
+        })
 
 
     });
