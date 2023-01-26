@@ -4,7 +4,7 @@
 <br/><br/><br/>
 
 
-# Práctica 6: Posts
+# Práctica 7: Posts
 
 Versión: 25 de Enero de 2023
 
