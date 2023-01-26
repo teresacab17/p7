@@ -18,7 +18,7 @@ Desarrollar un servidor web que implemente un **Blog** usando node y express.
 Este blog debe mostrar las publicaciones que se hayan realizado, debe permitir crear nuevas publicaciones, y 
 editar o borrar las ya existentes.En este enunciado usaremos el término **post** para referirnos a una publicación.
 
-Esta práctica se desarrollará como continuación de la **Práctica 5 Express CV**, añadiendo todos los elementos 
+Esta práctica se desarrollará como continuación de la **Práctica 6 Express CV**, añadiendo todos los elementos 
 necesarios para convertirla en un blog.
 
 El desarrollo a realizar en esta práctica es muy parecido al realizado en el mini proyecto **Quiz** visto en las clases
@@ -28,7 +28,7 @@ ambos casos, quizzes y posts pueden tener una imagen adjunta. Los modelos a desa
 controladores, las vistas, etc. serán muy parecidos a los del mini proyecto **Quiz**. La principal diferencia radica 
 en que en el mini proyecto **Quiz** se puede jugar a adivinar los quizzes, y esa funcionalidad no existe en el blog.
 
-En la práctica 6 deben añadirse las siguiente primitivas al interfaz REST:
+En la práctica 7 deben añadirse las siguiente primitivas al interfaz REST:
 
 * `GET /posts`
     * Muestra un listado con todos los posts existentes en la BBDD.
@@ -72,18 +72,18 @@ Instrucciones [aquí](https://github.com/CORE-UPM/Instrucciones_Practicas/blob/m
 
 ## Tareas
 
-### Tarea 1 - Copiar el trabajo ya realizado en la Entrega 5 ExpressCV
+### Tarea 1 - Copiar el trabajo ya realizado en la Entrega 6 ExpressCV
 
-En esta práctica hay que continuar y ampliar el desarrollo realizado en la práctica 5.
+En esta práctica hay que continuar y ampliar el desarrollo realizado en la práctica 6.
 
-El alumno debe copiar el directorio **blog** de la **P5_ExpressCV** en el directorio **P6_Blog/blog** de 
-esta práctica 6. Las tareas a realizar en esta práctica 6 de desarrollarán dentro del directorio **P6_Blog/blog**.
+El alumno debe copiar el directorio **blog** de la **P6_ExpressCV** en el directorio **P7_Blog/blog** de 
+esta práctica 6. Las tareas a realizar en esta práctica 6 de desarrollarán dentro del directorio **P7_Blog/blog**.
 
-Para copiar/duplicar el directorio **P5_ExpressCV/blog** en el directorio **P6_Blog/blog**, puede usar un
+Para copiar/duplicar el directorio **P6_ExpressCV/blog** en el directorio **P7_Blog/blog**, puede usar un
 explorador de archivos. Asegúrese de copiar el directorio y no de moverlo de sitio, para no perder el trabajo original.
 También puede ejecutar el siguiente comando en un terminal para copiar el directorio y todo su contenido:
 
-    $ cp -r PATH_DE_PRACTICA_5/P5_ExpressCV/blog PATH_DE_PRACTICA_6/P6_Blog/.
+    $ cp -r PATH_DE_PRACTICA_6/P6_ExpressCV/blog PATH_DE_PRACTICA_7/P7_Blog/.
 
 ### Tarea 2 - Desarrollar el modelo
 
