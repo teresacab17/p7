@@ -77,7 +77,7 @@ Instrucciones [aquí](https://github.com/CORE-UPM/Instrucciones_Practicas/blob/m
 En esta práctica hay que continuar y ampliar el desarrollo realizado en la práctica 6.
 
 El alumno debe copiar el directorio **blog** de la **P6_ExpressCV** en el directorio **P7_Blog/blog** de 
-esta práctica 6. Las tareas a realizar en esta práctica 6 de desarrollarán dentro del directorio **P7_Blog/blog**.
+esta práctica 7. Las tareas a realizar en esta práctica 7 de desarrollarán dentro del directorio **P7_Blog/blog**.
 
 Para copiar/duplicar el directorio **P6_ExpressCV/blog** en el directorio **P7_Blog/blog**, puede usar un
 explorador de archivos. Asegúrese de copiar el directorio y no de moverlo de sitio, para no perder el trabajo original.
