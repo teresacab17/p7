@@ -386,8 +386,29 @@ Instrucciones [aquí](https://github.com/CORE-UPM/Instrucciones_Practicas/blob/m
 
 Capturas a entregar con esta práctica: 
 
-- Captura 1:
-- Captura 2:
+- Captura 1: Captura de la pantalla que muestra el listado de todos los posts. 
+  Deben verse varios posts con sus imágenes adjuntas.
+<kbd>
+<img src="https://github.com/CORE-UPM/P7_Blog/blob/master/Captura.7.1.png" alt="captura de pantalla" width="500"/>
+</kbd>
+
+- Captura 2: Captura de una pantalla que muestre un único post. 
+  Debe mostrarse el contenido del post y su imagen adjunta.
+<kbd>
+<img src="https://github.com/CORE-UPM/P7_Blog/blob/master/Captura.7.2.png" alt="captura de pantalla" width="500"/>
+</kbd>
+
+- Captura 3: Captura de la pantalla que muestra el formulario de crear un nuevo post.
+  Deben verse los campos del formulario.
+<kbd>
+<img src="https://github.com/CORE-UPM/P7_Blog/blob/master/Captura.7.3.png" alt="captura de pantalla" width="500"/>
+</kbd>
+ 
+- Captura 4: Captura de la pantalla que muestra el formulario de editar un post.  
+  Deben verse los campos del formulario.
+<kbd>
+<img src="https://github.com/CORE-UPM/P7_Blog/blob/master/Captura.7.4.png" alt="captura de pantalla" width="500"/>
+</kbd>
 
 ## Instrucciones para la Entrega y Evaluación.
 
