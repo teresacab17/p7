@@ -389,7 +389,8 @@ Capturas a entregar con esta práctica:
 - Captura 1: Captura de la pantalla que muestra el listado de todos los posts. 
   Deben verse varios posts con sus imágenes adjuntas.
 <kbd>
-<img src="https://github.com/CORE-UPM/P7_Blog/blob/master/Captura.7.1.png" alt="captura de pantalla" width="500"/>
+<img src="https://user-images.githubusercontent.com/52309/218455977-b8caac14-aa04-4171-b5a1-d4955b089b5b.png" alt="captura de pantalla" width="500"/>
+
 </kbd>
 
 - Captura 2: Captura de una pantalla que muestre un único post. 
