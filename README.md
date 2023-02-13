@@ -6,7 +6,7 @@
 
 # Práctica 7: Posts
 
-Versión: 25 de Enero de 2023
+Versión: 13 de Febrero de 2023
 
 ## Objetivos
 * Afianzar los conocimientos obtenidos sobre el uso de Express para desarrollar servidores web.
@@ -389,26 +389,25 @@ Capturas a entregar con esta práctica:
 - Captura 1: Captura de la pantalla que muestra el listado de todos los posts. 
   Deben verse varios posts con sus imágenes adjuntas.
 <kbd>
-<img src="https://user-images.githubusercontent.com/52309/218455977-b8caac14-aa04-4171-b5a1-d4955b089b5b.png" alt="captura de pantalla" width="500"/>
-
+<img src="https://user-images.githubusercontent.com/716928/218465006-f3cb3409-304f-4994-ac7e-d670c1ab8d91.png" alt="captura de pantalla" width="500"/>
 </kbd>
 
 - Captura 2: Captura de una pantalla que muestre un único post. 
   Debe mostrarse el contenido del post y su imagen adjunta.
 <kbd>
-<img src="https://github.com/CORE-UPM/P7_Blog/blob/master/Captura.7.2.png" alt="captura de pantalla" width="500"/>
+<img src="https://user-images.githubusercontent.com/716928/218465046-f993e483-ef5a-4f9f-b2fa-f24797683508.png" alt="captura de pantalla" width="500"/>
 </kbd>
 
 - Captura 3: Captura de la pantalla que muestra el formulario de crear un nuevo post.
   Deben verse los campos del formulario.
 <kbd>
-<img src="https://github.com/CORE-UPM/P7_Blog/blob/master/Captura.7.3.png" alt="captura de pantalla" width="500"/>
+<img src="https://user-images.githubusercontent.com/716928/218465070-6339706b-c069-430c-9bed-6a0c148d252c.png" alt="captura de pantalla" width="500"/>
 </kbd>
  
 - Captura 4: Captura de la pantalla que muestra el formulario de editar un post.  
   Deben verse los campos del formulario.
 <kbd>
-<img src="https://github.com/CORE-UPM/P7_Blog/blob/master/Captura.7.4.png" alt="captura de pantalla" width="500"/>
+<img src="https://user-images.githubusercontent.com/716928/218465103-ac01bc5a-20ee-4043-91ea-daaaea62f3e9.png" alt="captura de pantalla" width="500"/>
 </kbd>
 
 ## Instrucciones para la Entrega y Evaluación.
