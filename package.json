@@ -1,12 +1,15 @@
 {
-    "name": "P6_Blog",
+    "name": "P7_Blog",
     "author": "CORE-UPM",
     "license": "GNU",
     "version": "0.1.3",
     "info": {
-        "githubURL": "CORE-UPM/P6_Blog",
-        "serverUrl": "https://autocorector.dit.upm.es/",
+        "githubURL": "CORE-UPM/P7_Blog",
+        "serverUrl": "https://aat.dit.upm.es/",
         "courseId": "395",
-        "assignmentId": "51659"
+        "assignmentId": "12970"
+    },
+    "dependencies": {
+        "autocorector": "^3.1.6"
     }
 }
