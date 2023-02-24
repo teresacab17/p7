@@ -100,7 +100,7 @@ el modelo **Attachment** con los campos **mime**, **url** e **image**, se defini
 y se exportará la instancia **sequelize** creada.
 
 El tipo del campo **image** del modelo **Attachment** debe ser **BLOB('long')**, y su contenido serán los bytes de la
-imagen adjunta codificados en base64.
+imagen.
 
 La relación 1-a-1 entre **Post** y **Attachment** debe definirse de forma que la clave externa **attachmentId** se 
 cree en la tabla **Posts**. 
@@ -182,11 +182,11 @@ continue en el siguiente middleware de atención de errores.
 
 ### Tarea 5 - Desarrollar la primitiva GET /posts/:postId/attachment
 
-La imagen adjunta de un post se almacena en el campo **image** de la tabla **Attachments** como un string codificado en **base64**. Para mostrar esta imagen en un fichero HTML, se debe usar una etiqueta **img** con una URL que contenga el MIMETYPE y los datos en base64 de la imagen siguiendo el formato:
+La imagen adjunta de un post se almacena en el campo **image** de la tabla **Attachments**. 
 
-    <img src="data:MIMETYPE;base64,DATOS"/>
+Para mostrar esta imagen en un fichero HTML, se debe usar una etiqueta **img** y asignar al atributo **src** el valor **/posts/POST_ID/attachment**, donde **POST_ID** de debe sustituir por el valor del parámetro de ruta **:postId**.
 
-Estas URL son muy largas y los ficheros HTML que las usan son enormes. Para evitar usar estas URL tan largas, se pueden definir rutas para acceder a las imágenes y que oculten esta implementación. Esta estrategia es la que se ha seguido en el mini proyecto **Quiz**, y se pide aplicarla también en esta práctica.
+    <img src="/posts/POST_ID/attachment"/>
 
 Se pide definir la ruta **GET /posts/:postId/attachment** para acceder a la imagen adjunta de post indicado por el parámetro de ruta **postId**.
 
