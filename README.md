@@ -16,7 +16,7 @@ Versión: 13 de Febrero de 2023
 
 Desarrollar un servidor web que implemente un **Blog** usando node y express. 
 Este blog debe mostrar las publicaciones que se hayan realizado, debe permitir crear nuevas publicaciones, y 
-editar o borrar las ya existentes.En este enunciado usaremos el término **post** para referirnos a una publicación.
+editar o borrar las ya existentes. En este enunciado usaremos el término **post** para referirnos a una publicación.
 
 Esta práctica se desarrollará como continuación de la **Práctica 6 Express CV**, añadiendo todos los elementos 
 necesarios para convertirla en un blog.
