@@ -6,7 +6,7 @@
 
 # Práctica 7: Posts
 
-Versión: 24 de Febrero de 2023
+Versión: 14 de Abril de 2023
 
 ## Objetivos
 * Afianzar los conocimientos obtenidos sobre el uso de Express para desarrollar servidores web.
@@ -62,7 +62,7 @@ Las rutas se definirán en el fichero **routes/index.js**.
 Los middlewares de los posts se crearán en el fichero controlador **controllers/post.js**.
 Las vistas de los posts se crearán en el directorio **views/posts**, y se llamarán 
 **_form.ejs**, **edit.ejs**, **index.ejs**, **new.ejs** y **show.ejs**.
-La vista que pinta los adjuntos se creará en **views/attachments/attachment.ejs**.
+La vista que pinta los adjuntos se creará en **views/attachments/_attachment.ejs**.
 
 
 
@@ -98,6 +98,8 @@ Se requerirá el paquete **sequelize**, se creará una instancia de **Sequelize*
 alojada en el fichero **blog.sqlite**, se definirá el modelo **Post** con los campos **title** y **body**, se definirá 
 el modelo **Attachment** con los campos **mime**, **url** e **image**, se definira la relación 1-a-1 entre **Post** y **Attachment**
 y se exportará la instancia **sequelize** creada.
+
+El tipo del campo **body** del modelo **Post** debe ser **TEXT**.
 
 El tipo del campo **image** del modelo **Attachment** debe ser **BLOB('long')**, y su contenido serán los bytes de la
 imagen.
