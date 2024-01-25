@@ -9,7 +9,7 @@
         "githubURL": "CORE-UPM/P7_Blog",
         "serverUrl": "https://aat.dit.upm.es/",
         "courseId": "395",
-        "assignmentId": "12970"
+        "assignmentId": "454"
     },
     "dependencies": {
         "autocorector": "^3.1.6"
