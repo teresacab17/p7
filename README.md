@@ -96,7 +96,7 @@ El alumno debe crear el fichero **models/index.js**.
 El contenido del fichero **models/index.js** es muy parecido al realizado en el mini proyecto **Quiz**. 
 Se requerirá el paquete **sequelize**, se creará una instancia de **Sequelize** que maneje la base de datos **SQLite** 
 alojada en el fichero **blog.sqlite**, se definirá el modelo **Post** con los campos **title** y **body**, se definirá 
-el modelo **Attachment** con los campos **mime**, **url** e **image**, se definira la relación 1-a-1 entre **Post** y **Attachment**
+el modelo **Attachment** con los campos **mime** e **image**, se definira la relación 1-a-1 entre **Post** y **Attachment**
 y se exportará la instancia **sequelize** creada.
 
 El tipo del campo **body** del modelo **Post** debe ser **TEXT**.
@@ -116,10 +116,10 @@ Para crear estos ficheros puede usar los comandos:
     npx sequelize migration:create --name  CreateAttachmentsTable
     npx sequelize migration:create --name  CreatePostsTable
 
-Nota: en el mini proyecto **Quiz** se usaba una migración separada para añadir el campo **attachmentId** a la tabla
-**Quizzes**.
-En esta práctica se propone crear ese campo directamente en la migración CreatePostsTable, es decir, que esa migración 
-cree todos los campos de la tabla **Posts**: **id**, **title**, **body**, **attachmentId**, **createdAt** y **updatedAt**.
+Nota: en el mini proyecto **Quiz** se usaba una migración separada para añadir el campo **quizId** a la tabla
+**Attachments**.
+En esta práctica se propone crear ese campo directamente en la migración CreateAttachmentsTable, es decir, que esa migración 
+cree todos los campos de la tabla **Attachments**: **id**, **mime**, **image**, **postId**, **createdAt** y **updatedAt**.
 
 El alumno también debe crear un fichero seeder que añada a la tabla **Posts** tres posts sin imagen adjunta y con el siguiente contenido:
 
