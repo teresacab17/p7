@@ -113,8 +113,8 @@ Los ficheros de migración deben llamarse **migrations/YYYYMMDDhhmmss-CreateAtta
 **migrations/YYYYMMDDhhmmss-CreatePostsTable.js**, donde YYYYMMDDhhmmss es la fecha en la que se creó cada fichero. 
 Para crear estos ficheros puede usar los comandos:
 
-    npx sequelize migration:create --name  CreateAttachmentsTable
     npx sequelize migration:create --name  CreatePostsTable
+    npx sequelize migration:create --name  CreateAttachmentsTable
 
 Nota: en el mini proyecto **Quiz** se usaba una migración separada para añadir el campo **quizId** a la tabla
 **Attachments**.
