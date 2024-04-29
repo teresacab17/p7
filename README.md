@@ -192,11 +192,11 @@ Para mostrar esta imagen en un fichero HTML, se debe usar una etiqueta **img** y
 
 Se pide definir la ruta **GET /posts/:postId/attachment** para acceder a la imagen adjunta de post indicado por el parámetro de ruta **postId**.
 
-Esta ruta debe definirse en el fichero **routes/index.js**.
+Esta ruta debe definirse en el fichero **routes/posts.js**.
 
 El método middleware que atiende esta petición debe desarrollarse en el fichero controlador **controllers/post.js**, y debe llamarse **attachment**. Este middleware debe devolver la imagen, y si no existe, devolver una imagen por defecto situada en el directorio  public/images/none.png.
 
-El fichero **routes/index.js** debe requerir/importar el fichero **controllers/post.js** para poder acceder al método **attachment** exportado.
+El fichero **routes/posts.js** debe requerir/importar el fichero **controllers/post.js** para poder acceder al método **attachment** exportado.
 
 
 ### Tarea 6 - Desarrollar la primitiva GET /posts
