@@ -6,7 +6,7 @@
 
 # Práctica 7: Posts
 
-Versión: 23 de Enero de 2024
+Versión: 29 de Abril de 2024
 
 ## Objetivos
 * Afianzar los conocimientos obtenidos sobre el uso de Express para desarrollar servidores web.
@@ -58,7 +58,7 @@ Los ficheros con las definiciones de los modelos, las migraciones, los seeders, 
 y vistas se crearán siguiendo la misma filosofía que en el mini proyecto **Quiz**. 
 Los modelos se definirán en los ficheros **models/index.js**, **models/post.js** y **models/attachment.js**.
 Las migraciones y seeders se crearán en los directorios **migrations** y **seeders**.
-Las rutas se definirán en el fichero **routes/index.js**.
+Las rutas se definirán en los ficheros **routes/index.js** y **routes/posts.js**.
 Los middlewares de los posts se crearán en el fichero controlador **controllers/post.js**.
 Las vistas de los posts se crearán en el directorio **views/posts**, y se llamarán 
 **_form.ejs**, **edit.ejs**, **index.ejs**, **new.ejs** y **show.ejs**.
