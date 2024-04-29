@@ -204,12 +204,12 @@ El fichero **routes/posts.js** debe requerir/importar el fichero **controllers/p
 El servidor debe devolver una página mostrando todos los posts almacenados en la BBDD cuando reciba la 
 petición HTTP **GET /posts**.
 
-Esta ruta debe definirse en el fichero **routes/index.js**.
+Esta ruta debe definirse en el fichero **routes/posts.js**.
 
 El método middleware que atiende esta peticiónes deben desarrollarse en el fichero controlador **controllers/post.js**,
 y debe llamarse **index**.
 
-El fichero **routes/index.js** debe requerir/importar el fichero **controllers/post.js**
+El fichero **routes/posts.js** debe requerir/importar el fichero **controllers/post.js**
 para poder acceder al método **index** exportado.
 
 El middleware **index** debe recuperar de la base de datos todos los posts existentes usando el método **findAll** del 
@@ -241,7 +241,7 @@ Ahora el servidor debe responder a la petición **GET http://localhost:3000/post
 El servidor debe devolver una página mostrando el post de la BBDD cuyo **id** es igual al valor pasado 
 en el parámetro de ruta **:postId** cuando reciba la petición HTTP **GET /posts/:postId**.
 
-Esta ruta debe definirse en el fichero **routes/index.js**.
+Esta ruta debe definirse en el fichero **routes/posts.js**.
 
 El método middleware que atiende esta peticiónes deben desarrollarse en el
 fichero controlador **controllers/post.js**, y debe llamarse **show**.
@@ -340,7 +340,7 @@ Para instalar el paquete multer debe ejecutar el comando:
 
     $ npm install multer
 
-y debe importarlo, configurarlo y usarlo solo en las rutas de creación y actualización de **routes/index.js**.
+y debe importarlo, configurarlo y usarlo solo en las rutas de creación y actualización de **routes/posts.js**.
 
 Configure **multer** para que las imágenes se reciban en memoria, y no se acepten
 imágenes mayores de 20MB.
@@ -364,7 +364,7 @@ petición HTTP **DELETE /posts/:postId**.
 
 Si el post a borrar tiene una imagen adjunta, entonces tambien debe borrarse de la tabla **Attachments**.
 
-La ruta de esta petición debe definirse en el fichero **routes/index.js**.
+La ruta de esta petición debe definirse en el fichero **routes/posts.js**.
 
 El método middleware que atiende esta petición debe desarrollarse en el
 fichero controlador **controllers/post.js**, y debe llamarse **destroy**. 
