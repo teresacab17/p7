@@ -6,7 +6,7 @@
 
 # Práctica 7: Posts
 
-Versión: 29 de Abril de 2024
+Versión: 30 de Abril de 2024
 
 ## Objetivos
 * Afianzar los conocimientos obtenidos sobre el uso de Express para desarrollar servidores web.
@@ -104,10 +104,10 @@ El tipo del campo **body** del modelo **Post** debe ser **TEXT**.
 El tipo del campo **image** del modelo **Attachment** debe ser **BLOB('long')**, y su contenido serán los bytes de la
 imagen.
 
-La relación 1-a-1 entre **Post** y **Attachment** debe definirse de forma que la clave externa **attachmentId** se 
-cree en la tabla **Posts**. 
+La relación 1-a-1 entre **Post** y **Attachment** debe definirse de forma que la clave externa **postId** se 
+cree en la tabla **Attachments**. 
 
-El alumno también debe crear dos migraciones para crear las tablas **Posts**y **Attachments** en la base de datos. 
+El alumno también debe crear dos migraciones para crear las tablas **Posts** y **Attachments** en la base de datos. 
 
 Los ficheros de migración deben llamarse **migrations/YYYYMMDDhhmmss-CreateAttachmentsTable.js** y
 **migrations/YYYYMMDDhhmmss-CreatePostsTable.js**, donde YYYYMMDDhhmmss es la fecha en la que se creó cada fichero. 
